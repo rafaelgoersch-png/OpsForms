@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulários Operacionais</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <h1>Formulários Operacionais</h1>
+        <p>SITOP, Caça-Desvio e Captura de Evento para WhatsApp / Teams</p>
+      </div>
+
+      <div class="top-actions">
+        <button id="copyTopBtn" class="primary" type="button">Copiar texto</button>
+        <button id="clearHeaderBtn" type="button">Limpar cabeçalho</button>
+        <button id="clearBodyBtn" type="button">Limpar dados</button>
+        <button id="clearAllBtn" class="danger" type="button">Limpar tudo</button>
+      </div>
+    </header>
+
+    <section class="form-selector card">
+      <h2>Tipo de registro</h2>
+      <div class="selector-grid">
+        <label class="selector-option">
+          <input type="radio" name="formType" value="sitop" checked />
+          <span>
+            <strong>SITOP</strong>
+            <small>Relatório de turno / situação operacional</small>
+          </span>
+        </label>
+
+        <label class="selector-option">
+          <input type="radio" name="formType" value="desvio" />
+          <span>
+            <strong>Caça-Desvio</strong>
+            <small>Desvio, risco, ação e evidência</small>
+          </span>
+        </label>
+
+        <label class="selector-option">
+          <input type="radio" name="formType" value="evento" />
+          <span>
+            <strong>Captura de Evento</strong>
+            <small>Evento, lição aprendida, alerta ou boa prática</small>
+          </span>
+        </label>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <form id="mainForm" class="form-panel" autocomplete="off">
+        <!-- SITOP -->
+        <section id="sitopForm" class="form-view">
+          <section class="card">
+            <h2>1. Cabeçalho — SITOP</h2>
+
+            <div class="grid two">
+              <label>
+                <span>Sonda</span>
+                <input id="sitop_sonda" data-form="sitop" data-group="header" />
+              </label>
+
+              <label>
+                <span>Poço</span>
+                <input id="sitop_poco" data-form="sitop" data-group="header" />
+              </label>
+
+              <label>
+                <span>Fiscal</span>
+                <input id="sitop_fiscal" data-form="sitop" data-group="header" />
+              </label>
+
+              <label>
+                <span>Data</span>
+                <input type="date" id="sitop_data" data-form="sitop" data-group="body" />
+              </label>
+
+              <label>
+                <span>Turno</span>
+                <select id="sitop_turno" data-form="sitop" data-group="body">
+                  <option value="">Selecione...</option>
+                  <option>00h–12h</option>
+                  <option>12h–00h</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>2. Dados do turno</h2>
+
+            <label>
+              <span>1. Situação do Projeto</span>
+              <textarea id="sitop_situacao" data-form="sitop" data-group="body" rows="4"></textarea>
+            </label>
+
+            <label>
+              <span>2. Próximas 12h</span>
+              <textarea id="sitop_proximas" data-form="sitop" data-group="body" rows="4"></textarea>
+            </label>
+
+            <label>
+              <span>3. Desempenho vs Programa</span>
+              <input id="sitop_desempenho" data-form="sitop" data-group="body" />
+            </label>
+
+            <label>
+              <span>6. Observações Relevantes</span>
+              <textarea id="sitop_observacoes" data-form="sitop" data-group="body" rows="4"></textarea>
+            </label>
+          </section>
+
+          <section class="card">
+            <div class="card-title-row">
+              <h2>3. NPT do projeto</h2>
+              <button type="button" id="addNptBtn">Adicionar NPT</button>
+            </div>
+
+            <div id="sitop_npt_list" class="dynamic-list"></div>
+
+            <label>
+              <span>Total NPT</span>
+              <input id="sitop_npt_total" data-form="sitop" data-group="body" />
+            </label>
+          </section>
+
+          <section class="card">
+            <div class="card-title-row">
+              <h2>4. Incidentes / Acidentes</h2>
+              <button type="button" id="addIncidentBtn">Adicionar incidente</button>
+            </div>
+
+            <div id="sitop_incident_list" class="dynamic-list"></div>
+
+            <label>
+              <span>Total NPT associado</span>
+              <input id="sitop_inc_total_npt" data-form="sitop" data-group="body" />
+            </label>
+          </section>
+        </section>
+
+        <!-- CAÇA DESVIO -->
+        <section id="desvioForm" class="form-view hidden">
+          <section class="card">
+            <h2>1. Cabeçalho — Caça-Desvio</h2>
+
+            <div class="grid two">
+              <label>
+                <span>Sonda</span>
+                <input id="desvio_sonda" data-form="desvio" data-group="header" />
+              </label>
+
+              <label>
+                <span>Área / Sistema</span>
+                <input id="desvio_areaSistema" data-form="desvio" data-group="header" />
+              </label>
+
+              <label>
+                <span>Data / Hora</span>
+                <input type="datetime-local" id="desvio_dataHora" data-form="desvio" data-group="header" />
+              </label>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>2. Desvio</h2>
+
+            <label>
+              <span>Desvio identificado</span>
+              <textarea id="desvio_desvio" data-form="desvio" data-group="body" rows="4"></textarea>
+            </label>
+
+            <label>
+              <span>Risco associado</span>
+              <textarea id="desvio_risco" data-form="desvio" data-group="body" rows="4"></textarea>
+            </label>
+
+            <label>
+              <span>Ação imediata tomada</span>
+              <textarea id="desvio_acao" data-form="desvio" data-group="body" rows="4"></textarea>
+            </label>
+
+            <div class="section-label">Status atual</div>
+            <div class="chips">
+              <label><input type="radio" name="desvio_status" value="🟡 Em análise" data-form="desvio" data-group="body" /> <span>🟡 Em análise</span></label>
+              <label><input type="radio" name="desvio_status" value="🟠 Em correção" data-form="desvio" data-group="body" /> <span>🟠 Em correção</span></label>
+              <label><input type="radio" name="desvio_status" value="🟢 Encerrado" data-form="desvio" data-group="body" /> <span>🟢 Encerrado</span></label>
+              <label><input type="radio" name="desvio_status" value="🔴 Crítico" data-form="desvio" data-group="body" /> <span>🔴 Crítico</span></label>
+            </div>
+
+            <div class="section-label">Setor responsável pela correção</div>
+            <div class="chips">
+              <label><input type="checkbox" name="desvio_setor" value="Operações" data-form="desvio" data-group="body" /> <span>Operações</span></label>
+              <label><input type="checkbox" name="desvio_setor" value="Integridade" data-form="desvio" data-group="body" /> <span>Integridade</span></label>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>3. Classificação</h2>
+
+            <div class="section-label">Classificação do desvio</div>
+            <div class="chips">
+              <label><input type="radio" name="desvio_classificacao" value="Comportamental" data-form="desvio" data-group="body" /> <span>Comportamental</span></label>
+              <label><input type="radio" name="desvio_classificacao" value="Condição do ambiente/instalação" data-form="desvio" data-group="body" /> <span>Condição do ambiente/instalação</span></label>
+              <label><input type="radio" name="desvio_classificacao" value="Operacional" data-form="desvio" data-group="body" /> <span>Operacional</span></label>
+              <label><input type="radio" name="desvio_classificacao" value="Sugestão/melhoria" data-form="desvio" data-group="body" /> <span>Sugestão/melhoria</span></label>
+            </div>
+
+            <div class="section-label">Regra de Ouro</div>
+            <div class="checkbox-stack compact">
+              <label><input type="checkbox" name="desvio_regraOuro" value="1. Conhecer para Executar" data-form="desvio" data-group="body" /> <span>1. Conhecer para Executar</span></label>
+              <label><input type="checkbox" name="desvio_regraOuro" value="2. Avaliação de Risco" data-form="desvio" data-group="body" /> <span>2. Avaliação de Risco</span></label>
+              <label><input type="checkbox" name="desvio_regraOuro" value="3. Permissão de Trabalho Válida" data-form="desvio" data-group="body" /> <span>3. Permissão de Trabalho Válida</span></label>
+              <label><input type="checkbox" name="desvio_regraOuro" value="4. Atividades Críticas" data-form="desvio" data-group="body" /> <span>4. Atividades Críticas</span></label>
+              <label><input type="checkbox" name="desvio_regraOuro" value="5. Controle de Energias" data-form="desvio" data-group="body" /> <span>5. Controle de Energias</span></label>
+              <label><input type="checkbox" name="desvio_regraOuro" value="6. Dispositivos de Segurança" data-form="desvio" data-group="body" /> <span>6. Dispositivos de Segurança</span></label>
+              <label><input type="checkbox" name="desvio_regraOuro" value="7. Gestão de Mudança" data-form="desvio" data-group="body" /> <span>7. Gestão de Mudança</span></label>
+              <label><input type="checkbox" name="desvio_regraOuro" value="8. Trânsito Seguro" data-form="desvio" data-group="body" /> <span>8. Trânsito Seguro</span></label>
+              <label><input type="checkbox" name="desvio_regraOuro" value="9. Ambiente Limpo" data-form="desvio" data-group="body" /> <span>9. Ambiente Limpo</span></label>
+              <label><input type="checkbox" name="desvio_regraOuro" value="10. Álcool e Outras Drogas" data-form="desvio" data-group="body" /> <span>10. Álcool e Outras Drogas</span></label>
+              <label><input type="checkbox" name="desvio_regraOuro" value="Não Aplicável" data-form="desvio" data-group="body" /> <span>Não Aplicável</span></label>
+            </div>
+
+            <div class="section-label">Sugestão de Criticidade</div>
+            <div class="chips">
+              <label><input type="radio" name="desvio_criticidade" value="C1" data-form="desvio" data-group="body" /> <span>C1</span></label>
+              <label><input type="radio" name="desvio_criticidade" value="C2" data-form="desvio" data-group="body" /> <span>C2</span></label>
+              <label><input type="radio" name="desvio_criticidade" value="C3" data-form="desvio" data-group="body" /> <span>C3</span></label>
+              <label><input type="radio" name="desvio_criticidade" value="C4" data-form="desvio" data-group="body" /> <span>C4</span></label>
+            </div>
+
+            <label>
+              <span>Evidência</span>
+              <textarea id="desvio_evidencia" data-form="desvio" data-group="body" rows="3" placeholder="Ex.: foto enviada após a mensagem / vídeo / print / não aplicável"></textarea>
+            </label>
+          </section>
+        </section>
+
+        <!-- EVENTO -->
+        <section id="eventoForm" class="form-view hidden">
+          <section class="card">
+            <h2>1. Cabeçalho — Captura de Evento</h2>
+
+            <div class="grid two">
+              <label>
+                <span>Poço</span>
+                <input type="text" id="evento_well" data-form="evento" data-group="header" placeholder="Ex.: PR-XX" />
+              </label>
+
+              <label>
+                <span>Sonda / Área</span>
+                <input type="text" id="evento_rigArea" data-form="evento" data-group="header" placeholder="Ex.: Sonda PR-14 / Piso de sonda" />
+              </label>
+
+              <label>
+                <span>Registrado por</span>
+                <input type="text" id="evento_registeredBy" data-form="evento" data-group="header" />
+              </label>
+
+              <label>
+                <span>Fase</span>
+                <select id="evento_phase" data-form="evento" data-group="header"></select>
+              </label>
+
+              <label>
+                <span>Atividade</span>
+                <select id="evento_activity" data-form="evento" data-group="header"></select>
+              </label>
+
+              <label>
+                <span>Tipo de registro</span>
+                <select id="evento_recordType" data-form="evento" data-group="header">
+                  <option value="Evento operacional">Evento operacional</option>
+                  <option value="Lição aprendida">Lição aprendida</option>
+                  <option value="Alerta">Alerta</option>
+                  <option value="Boa prática">Boa prática</option>
+                  <option value="Desvio">Desvio</option>
+                  <option value="Quase falha">Quase falha</option>
+                  <option value="Oportunidade de melhoria">Oportunidade de melhoria</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>2. Tempo do evento</h2>
+
+            <fieldset class="segmented">
+              <legend>Formato do tempo</legend>
+              <label><input type="radio" name="evento_timeMode" value="fixed" data-form="evento" data-group="header" checked /> <span>Hora do evento</span></label>
+              <label><input type="radio" name="evento_timeMode" value="range" data-form="evento" data-group="header" /> <span>Intervalo de tempo</span></label>
+              <label><input type="radio" name="evento_timeMode" value="none" data-form="evento" data-group="header" /> <span>Sem vínculo de tempo</span></label>
+            </fieldset>
+
+            <div id="evento_fixedTimeFields" class="grid two">
+              <label>
+                <span>Data</span>
+                <input type="date" id="evento_eventDate" data-form="evento" data-group="header" />
+              </label>
+              <label>
+                <span>Hora</span>
+                <input type="time" id="evento_eventTime" data-form="evento" data-group="header" />
+              </label>
+            </div>
+
+            <div id="evento_rangeTimeFields" class="grid two hidden">
+              <label>
+                <span>Data inicial</span>
+                <input type="date" id="evento_startDate" data-form="evento" data-group="header" />
+              </label>
+              <label>
+                <span>Hora inicial</span>
+                <input type="time" id="evento_startTime" data-form="evento" data-group="header" />
+              </label>
+              <label>
+                <span>Data final</span>
+                <input type="date" id="evento_endDate" data-form="evento" data-group="header" />
+              </label>
+              <label>
+                <span>Hora final</span>
+                <input type="time" id="evento_endTime" data-form="evento" data-group="header" />
+              </label>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>3. Classificação</h2>
+
+            <div class="classification-grid">
+              <div class="classification-column">
+                <div class="section-label">Categoria</div>
+                <div id="evento_categoryGroup" class="checkbox-stack"></div>
+              </div>
+
+              <div class="classification-column">
+                <div class="section-label">Impacto observado ou potencial</div>
+                <div id="evento_impactGroup" class="checkbox-stack"></div>
+              </div>
+
+              <div class="classification-column criticality-column">
+                <div class="section-label">Criticidade</div>
+                <div class="criticality-box">
+                  <input type="range" id="evento_criticality" min="0" max="3" step="1" value="0" orient="vertical" data-form="evento" data-group="body" />
+                  <div class="criticality-labels">
+                    <span>Crítica</span>
+                    <span>Alta</span>
+                    <span>Média</span>
+                    <span>Baixa</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>4. Evento e ação</h2>
+
+            <label>
+              <span>Evento observado</span>
+              <textarea id="evento_eventDescription" data-form="evento" data-group="body" rows="5"></textarea>
+            </label>
+
+            <label>
+              <span>Detalhe do impacto, se necessário</span>
+              <textarea id="evento_impactDetail" data-form="evento" data-group="body" rows="3"></textarea>
+            </label>
+
+            <fieldset class="segmented">
+              <legend>Foi tomada alguma ação?</legend>
+              <label><input type="radio" name="evento_actionTakenMode" value="omit" data-form="evento" data-group="body" checked /> <span>Não informar</span></label>
+              <label><input type="radio" name="evento_actionTakenMode" value="yes" data-form="evento" data-group="body" /> <span>Sim</span></label>
+              <label><input type="radio" name="evento_actionTakenMode" value="no" data-form="evento" data-group="body" /> <span>Não</span></label>
+              <label><input type="radio" name="evento_actionTakenMode" value="na" data-form="evento" data-group="body" /> <span>Não aplicável</span></label>
+            </fieldset>
+
+            <label id="evento_actionTextWrap" class="hidden">
+              <span>Ação tomada</span>
+              <textarea id="evento_actionTaken" data-form="evento" data-group="body" rows="4"></textarea>
+            </label>
+          </section>
+
+          <section class="card">
+            <h2>5. Aprendizado</h2>
+
+            <label>
+              <span>Lição aprendida</span>
+              <textarea id="evento_lessonLearned" data-form="evento" data-group="body" rows="4"></textarea>
+            </label>
+
+            <label>
+              <span>Recomendação prática</span>
+              <textarea id="evento_recommendation" data-form="evento" data-group="body" rows="4"></textarea>
+            </label>
+
+            <div class="section-label">Aplicável a</div>
+            <div id="evento_applicableGroup" class="chips"></div>
+
+            <label>
+              <span>Detalhe de aplicabilidade</span>
+              <textarea id="evento_applicableDetail" data-form="evento" data-group="body" rows="3"></textarea>
+            </label>
+          </section>
+        </section>
+      </form>
+
+      <aside class="preview-panel">
+        <div class="preview-header">
+          <div>
+            <h2>Prévia do texto</h2>
+            <p>Texto pronto para copiar e colar.</p>
+          </div>
+          <span id="saveStatus">Salvo localmente</span>
+        </div>
+
+        <pre id="outputText"></pre>
+
+        <div class="preview-footer">
+          <button id="copyBottomBtn" class="primary" type="button">Copiar texto</button>
+          <p id="copyFeedback" aria-live="polite"></p>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
