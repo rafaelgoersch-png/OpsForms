@@ -1,4 +1,6 @@
-const STORAGE_KEY = 'formularios-operacionais-github-v1';
+const STORAGE_KEY = 'formularios-operacionais-github-v2';
+
+const RIGS = ['PR-21', 'PR-14'];
 
 const PHASES = ['26"', '17 1/2"', '12 1/4"', '8 1/2"', 'Outro'];
 
@@ -119,9 +121,9 @@ function formatDateBR(dateValue) {
   return `${day}/${month}/${year}`;
 }
 
-function formatDateTimeBR(value) {
-  if (!value) return '';
-  const [date, time] = value.split('T');
+function formatDateTimeBR(val) {
+  if (!val) return '';
+  const [date, time] = val.split('T');
   return `${formatDateBR(date)} ${time || ''}`.trim();
 }
 
@@ -290,7 +292,6 @@ function buildSitopOutput() {
   const incidents = collectIncidents();
 
   let text = `*SITOP DW 12h - Fiscalização*\n\n`;
-
   text += `*Sonda:* ${value('sitop_sonda') || '-'}\n`;
   text += `*Poço:* ${value('sitop_poco') || '-'}\n`;
   text += `*Data:* ${formatDateBR(value('sitop_data')) || '-'}\n`;
@@ -421,11 +422,14 @@ function buildEventoOutput() {
   const impacts = getCheckedValues('evento_impacts').join('; ');
   const applicable = getCheckedValues('evento_applicableTo').join('; ');
 
+  const areaComposed = [value('evento_rig'), value('evento_area')].filter(Boolean).join(' / ');
+
   const headerLines = [
     `📌 *REGISTRO OPERACIONAL — ${recordType.toUpperCase()}*`,
     '',
+    optionalLine('🏗️ *Sonda*', value('evento_rig')),
     optionalLine('🛢️ *Poço*', value('evento_well')),
-    optionalLine('🏗️ *Sonda/Área*', value('evento_rigArea')),
+    optionalLine('📍 *Área*', value('evento_area')),
     optionalLine('🧱 *Fase*', value('evento_phase')),
     optionalLine('⚙️ *Atividade*', value('evento_activity')),
     optionalLine('🏷️ *Categoria*', categories),
@@ -570,6 +574,14 @@ function clearCurrent(group) {
     }
   }
 
+  if (type === 'desvio' && group === 'header') {
+    initialiseDesvioDefaults(false);
+  }
+
+  if ((type === 'sitop' || type === 'desvio' || type === 'evento') && group === 'header') {
+    // keep rig select available but not forced
+  }
+
   updateOutput();
 }
 
@@ -613,8 +625,8 @@ function initialiseSitopDefaults() {
   if (!byId('sitop_incident_list').children.length) addIncident();
 }
 
-function initialiseDesvioDefaults() {
-  if (!value('desvio_dataHora')) setValue('desvio_dataHora', nowDateTimeInput());
+function initialiseDesvioDefaults(onlyIfEmpty = true) {
+  if (!onlyIfEmpty || !value('desvio_dataHora')) setValue('desvio_dataHora', nowDateTimeInput());
 }
 
 function initialiseEventDefaults(onlyIfEmpty = true) {
@@ -638,6 +650,9 @@ function attachAutoHandlers(root = document) {
 }
 
 function init() {
+  fillSelect('sitop_sonda', RIGS);
+  fillSelect('desvio_sonda', RIGS);
+  fillSelect('evento_rig', RIGS);
   fillSelect('evento_phase', PHASES);
   fillSelect('evento_activity', ACTIVITIES);
   fillCheckboxGroup('evento_categoryGroup', 'evento_categories', EVENT_CATEGORIES, 'header');
@@ -648,7 +663,7 @@ function init() {
 
   if (!loaded) {
     initialiseSitopDefaults();
-    initialiseDesvioDefaults();
+    initialiseDesvioDefaults(false);
     initialiseEventDefaults();
   } else {
     if (!byId('sitop_npt_list').children.length) addNpt();

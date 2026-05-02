@@ -61,7 +61,7 @@
             <div class="grid two">
               <label>
                 <span>Sonda</span>
-                <input id="sitop_sonda" data-form="sitop" data-group="header" />
+                <select id="sitop_sonda" data-form="sitop" data-group="header"></select>
               </label>
 
               <label>
@@ -151,7 +151,7 @@
             <div class="grid two">
               <label>
                 <span>Sonda</span>
-                <input id="desvio_sonda" data-form="desvio" data-group="header" />
+                <select id="desvio_sonda" data-form="desvio" data-group="header"></select>
               </label>
 
               <label>
@@ -247,18 +247,23 @@
 
             <div class="grid two">
               <label>
+                <span>Sonda</span>
+                <select id="evento_rig" data-form="evento" data-group="header"></select>
+              </label>
+
+              <label>
                 <span>Poço</span>
                 <input type="text" id="evento_well" data-form="evento" data-group="header" placeholder="Ex.: PR-XX" />
               </label>
 
               <label>
-                <span>Sonda / Área</span>
-                <input type="text" id="evento_rigArea" data-form="evento" data-group="header" placeholder="Ex.: Sonda PR-14 / Piso de sonda" />
+                <span>Registrado por</span>
+                <input type="text" id="evento_registeredBy" data-form="evento" data-group="header" />
               </label>
 
               <label>
-                <span>Registrado por</span>
-                <input type="text" id="evento_registeredBy" data-form="evento" data-group="header" />
+                <span>Área</span>
+                <input type="text" id="evento_area" data-form="evento" data-group="header" placeholder="Ex.: Piso de sonda" />
               </label>
 
               <label>
