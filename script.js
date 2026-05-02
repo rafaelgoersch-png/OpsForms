@@ -1,4 +1,5 @@
-const STORAGE_KEY = 'formularios-operacionais-github-v2';
+const STORAGE_KEY = 'formularios-operacionais-github-v3';
+const PREFS_KEY = 'formularios-operacionais-preferencias-v1';
 
 const RIGS = ['PR-21', 'PR-14'];
 
@@ -96,6 +97,69 @@ function setValue(id, val) {
   if (el) el.value = val || '';
 }
 
+function loadPrefs() {
+  try {
+    return JSON.parse(localStorage.getItem(PREFS_KEY)) || {};
+  } catch {
+    return {};
+  }
+}
+
+function savePrefs(prefs) {
+  localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
+}
+
+function getRigFieldIds() {
+  return ['sitop_sonda', 'desvio_sonda', 'evento_rig'];
+}
+
+function getWellFieldIds() {
+  return ['sitop_poco', 'desvio_poco', 'evento_well'];
+}
+
+function getCurrentRigValue() {
+  for (const id of getRigFieldIds()) {
+    const val = value(id);
+    if (val) return val;
+  }
+  return '';
+}
+
+function getCurrentWellValue() {
+  for (const id of getWellFieldIds()) {
+    const val = value(id);
+    if (val) return val;
+  }
+  return '';
+}
+
+function updatePrefsFromFields() {
+  const prefs = loadPrefs();
+  const rig = getCurrentRigValue();
+  const well = getCurrentWellValue();
+
+  if (rig) prefs.lastRig = rig;
+  if (well) prefs.lastWell = well;
+
+  savePrefs(prefs);
+}
+
+function applyPrefsToEmptyHeaderFields() {
+  const prefs = loadPrefs();
+
+  if (prefs.lastRig) {
+    getRigFieldIds().forEach(id => {
+      if (byId(id) && !value(id)) setValue(id, prefs.lastRig);
+    });
+  }
+
+  if (prefs.lastWell) {
+    getWellFieldIds().forEach(id => {
+      if (byId(id) && !value(id)) setValue(id, prefs.lastWell);
+    });
+  }
+}
+
 function pad(value) {
   return String(value).padStart(2, '0');
 }
@@ -121,9 +185,9 @@ function formatDateBR(dateValue) {
   return `${day}/${month}/${year}`;
 }
 
-function formatDateTimeBR(val) {
-  if (!val) return '';
-  const [date, time] = val.split('T');
+function formatDateTimeBR(value) {
+  if (!value) return '';
+  const [date, time] = value.split('T');
   return `${formatDateBR(date)} ${time || ''}`.trim();
 }
 
@@ -292,6 +356,7 @@ function buildSitopOutput() {
   const incidents = collectIncidents();
 
   let text = `*SITOP DW 12h - Fiscalização*\n\n`;
+
   text += `*Sonda:* ${value('sitop_sonda') || '-'}\n`;
   text += `*Poço:* ${value('sitop_poco') || '-'}\n`;
   text += `*Data:* ${formatDateBR(value('sitop_data')) || '-'}\n`;
@@ -335,6 +400,7 @@ function buildDesvioOutput() {
   let text = `⚠️ *CAÇA-DESVIO*\n\n`;
 
   text += `• *Sonda:* ${value('desvio_sonda') || '-'}\n`;
+  text += `• *Poço:* ${value('desvio_poco') || '-'}\n`;
   text += `• *Área / Sistema:* ${value('desvio_areaSistema') || '-'}\n`;
   text += `• *Data / Hora:* ${formatDateTimeBR(value('desvio_dataHora')) || '-'}\n\n`;
 
@@ -422,13 +488,11 @@ function buildEventoOutput() {
   const impacts = getCheckedValues('evento_impacts').join('; ');
   const applicable = getCheckedValues('evento_applicableTo').join('; ');
 
-  const areaComposed = [value('evento_rig'), value('evento_area')].filter(Boolean).join(' / ');
-
   const headerLines = [
     `📌 *REGISTRO OPERACIONAL — ${recordType.toUpperCase()}*`,
     '',
-    optionalLine('🏗️ *Sonda*', value('evento_rig')),
     optionalLine('🛢️ *Poço*', value('evento_well')),
+    optionalLine('🏗️ *Sonda*', value('evento_rig')),
     optionalLine('📍 *Área*', value('evento_area')),
     optionalLine('🧱 *Fase*', value('evento_phase')),
     optionalLine('⚙️ *Atividade*', value('evento_activity')),
@@ -468,6 +532,7 @@ function updateOutput() {
   toggleEventTimeFields();
   toggleEventActionField();
   updateEventCriticalityVisual();
+  updatePrefsFromFields();
   outputText.textContent = buildOutput();
   saveState();
 }
@@ -567,19 +632,14 @@ function clearCurrent(group) {
   }
 
   if (type === 'evento') {
-    if (group === 'header') initialiseEventDefaults(false);
+    if (group === 'header') {
+      initialiseEventDefaults(false);
+      applyPrefsToEmptyHeaderFields();
+    }
     if (group === 'body') {
       byId('evento_criticality').value = '0';
       document.querySelector('input[name="evento_actionTakenMode"][value="omit"]').checked = true;
     }
-  }
-
-  if (type === 'desvio' && group === 'header') {
-    initialiseDesvioDefaults(false);
-  }
-
-  if ((type === 'sitop' || type === 'desvio' || type === 'evento') && group === 'header') {
-    // keep rig select available but not forced
   }
 
   updateOutput();
@@ -619,14 +679,23 @@ async function copyOutput() {
   setTimeout(() => copyFeedback.textContent = '', 2200);
 }
 
+async function openWhatsApp() {
+  const text = outputText.textContent;
+
+  await copyOutput();
+
+  const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
 function initialiseSitopDefaults() {
   if (!value('sitop_data')) setValue('sitop_data', todayDateInput());
   if (!byId('sitop_npt_list').children.length) addNpt();
   if (!byId('sitop_incident_list').children.length) addIncident();
 }
 
-function initialiseDesvioDefaults(onlyIfEmpty = true) {
-  if (!onlyIfEmpty || !value('desvio_dataHora')) setValue('desvio_dataHora', nowDateTimeInput());
+function initialiseDesvioDefaults() {
+  if (!value('desvio_dataHora')) setValue('desvio_dataHora', nowDateTimeInput());
 }
 
 function initialiseEventDefaults(onlyIfEmpty = true) {
@@ -663,9 +732,11 @@ function init() {
 
   if (!loaded) {
     initialiseSitopDefaults();
-    initialiseDesvioDefaults(false);
+    initialiseDesvioDefaults();
     initialiseEventDefaults();
+    applyPrefsToEmptyHeaderFields();
   } else {
+    applyPrefsToEmptyHeaderFields();
     if (!byId('sitop_npt_list').children.length) addNpt();
     if (!byId('sitop_incident_list').children.length) addIncident();
   }
@@ -684,8 +755,8 @@ function init() {
     updateOutput();
   });
 
-  byId('copyTopBtn').addEventListener('click', copyOutput);
-  byId('copyBottomBtn').addEventListener('click', copyOutput);
+  byId('copyTopBtn').addEventListener('click', openWhatsApp);
+  byId('copyBottomBtn').addEventListener('click', openWhatsApp);
   byId('clearHeaderBtn').addEventListener('click', () => clearCurrent('header'));
   byId('clearBodyBtn').addEventListener('click', () => clearCurrent('body'));
   byId('clearAllBtn').addEventListener('click', clearCurrentAll);

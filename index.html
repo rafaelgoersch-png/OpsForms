@@ -15,7 +15,7 @@
       </div>
 
       <div class="top-actions">
-        <button id="copyTopBtn" class="primary" type="button">Copiar texto</button>
+        <button id="copyTopBtn" class="primary" type="button">Copiar texto e abrir WhatsApp</button>
         <button id="clearHeaderBtn" type="button">Limpar cabeçalho</button>
         <button id="clearBodyBtn" type="button">Limpar dados</button>
         <button id="clearAllBtn" class="danger" type="button">Limpar tudo</button>
@@ -152,6 +152,11 @@
               <label>
                 <span>Sonda</span>
                 <select id="desvio_sonda" data-form="desvio" data-group="header"></select>
+              </label>
+
+              <label>
+                <span>Poço</span>
+                <input id="desvio_poco" data-form="desvio" data-group="header" />
               </label>
 
               <label>
@@ -424,7 +429,7 @@
         <pre id="outputText"></pre>
 
         <div class="preview-footer">
-          <button id="copyBottomBtn" class="primary" type="button">Copiar texto</button>
+          <button id="copyBottomBtn" class="primary" type="button">Copiar texto e abrir WhatsApp</button>
           <p id="copyFeedback" aria-live="polite"></p>
         </div>
       </aside>
