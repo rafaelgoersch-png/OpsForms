@@ -494,4 +494,29 @@ button.danger {
   .grid.three {
     grid-template-columns: 1fr;
   }
+
+  .criticality-box {
+    width: 100%;
+    min-height: auto;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  #evento_criticality {
+    writing-mode: horizontal-tb;
+    direction: ltr;
+    width: 100%;
+    height: 34px;
+  }
+
+  .criticality-labels {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+  }
 }

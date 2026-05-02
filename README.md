@@ -34,3 +34,10 @@ Não precisa de servidor, backend ou banco de dados. O rascunho é salvo no nave
 - o botão principal agora é **Copiar texto e abrir WhatsApp**;
 - ao clicar, o texto é copiado e o WhatsApp/WhatsApp Web é aberto com a mensagem preenchida;
 - o envio continua manual e controlado pelo usuário.
+
+
+## Alteração v5
+
+- no desktop, o slider de criticidade continua vertical;
+- no celular, o slider de criticidade passa a ser horizontal;
+- no celular, a legenda fica em ordem intuitiva da esquerda para a direita: Baixa, Média, Alta, Crítica.
