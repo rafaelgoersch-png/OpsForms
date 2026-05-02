@@ -407,11 +407,11 @@ function buildEventActionText() {
 
   if (mode === 'yes') {
     const action = value('evento_actionTaken');
-    return action ? `🛠️ Ação tomada:\n${action}` : '🛠️ Ação tomada:\nSim, porém sem descrição preenchida.';
+    return action ? `🛠️ *Ação tomada:*\n${action}` : '🛠️ *Ação tomada:*\nSim, porém sem descrição preenchida.';
   }
 
-  if (mode === 'no') return '🛠️ Ação tomada:\nNão.';
-  if (mode === 'na') return '🛠️ Ação tomada:\nNão aplicável.';
+  if (mode === 'no') return '🛠️ *Ação tomada:*\nNão.';
+  if (mode === 'na') return '🛠️ *Ação tomada:*\nNão aplicável.';
 
   return '';
 }
