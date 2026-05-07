@@ -110,11 +110,11 @@ function savePrefs(prefs) {
 }
 
 function getRigFieldIds() {
-  return ['sitop_sonda', 'desvio_sonda', 'evento_rig'];
+  return ['sitop_sonda', 'sup_sonda', 'desvio_sonda', 'evento_rig'];
 }
 
 function getWellFieldIds() {
-  return ['sitop_poco', 'desvio_poco', 'evento_well'];
+  return ['sitop_poco', 'sup_poco', 'desvio_poco', 'evento_well'];
 }
 
 function getCurrentRigValue() {
@@ -351,6 +351,121 @@ function collectIncidents() {
   })).filter(item => item.desc || item.datahora);
 }
 
+
+function addSupervisorPronto(data = {}) {
+  const container = byId('sup_prontos_list');
+  if (!container) return;
+
+  const item = document.createElement('div');
+  item.className = 'dynamic-item supervisor-pronto-item';
+
+  const row = document.createElement('div');
+  row.className = 'row supervisor-pronto';
+
+  const nomeWrap = createSupervisorInputWrap('Nome do empregado', 'input', 'sup_pronto_nome', data.nome || '');
+  const mitigacaoWrap = createSupervisorInputWrap('Mitigação', 'input', 'sup_pronto_mitigacao', data.mitigacao || '');
+
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'danger';
+  removeBtn.textContent = 'Remover';
+  removeBtn.addEventListener('click', () => {
+    item.remove();
+    updateOutput();
+  });
+
+  row.append(nomeWrap, mitigacaoWrap, removeBtn);
+  item.appendChild(row);
+  container.appendChild(item);
+
+  attachAutoHandlers(item);
+}
+
+function createSupervisorInputWrap(labelText, type, className, val) {
+  const label = document.createElement('label');
+  const span = document.createElement('span');
+  const input = document.createElement(type);
+
+  span.textContent = labelText;
+  input.className = className;
+  input.value = val;
+  input.dataset.form = 'sitopSupervisor';
+  input.dataset.group = 'body';
+
+  label.append(span, input);
+  return label;
+}
+
+function collectSupervisorProntos() {
+  return [...document.querySelectorAll('.supervisor-pronto-item')].map(item => ({
+    nome: item.querySelector('.sup_pronto_nome').value.trim(),
+    mitigacao: item.querySelector('.sup_pronto_mitigacao').value.trim()
+  })).filter(item => item.nome || item.mitigacao);
+}
+
+function buildProntosTable(prontos) {
+  if (!prontos.length) return '';
+
+  const lines = [
+    '| Nome do empregado | Mitigação |',
+    '|---|---|'
+  ];
+
+  prontos.forEach(item => {
+    lines.push(`| ${item.nome || '-'} | ${item.mitigacao || '-'} |`);
+  });
+
+  return lines.join('\n');
+}
+
+function buildSitopSupervisorOutput() {
+  const prontos = collectSupervisorProntos();
+
+  let text = `*SITOP DW 12h - Supervisão*\n\n`;
+
+  text += `*Sonda:* ${value('sup_sonda') || '-'}\n`;
+  text += `*Poço:* ${value('sup_poco') || '-'}\n`;
+  text += `*Data:* ${formatDateBR(value('sup_data')) || '-'}\n`;
+  text += `*Turno:* ${value('sup_turno') || '-'}\n`;
+  text += `*Supervisor:* ${value('sup_supervisor') || '-'}\n`;
+  text += `*Turmas embarcadas:* ${value('sup_turmas') || '-'}\n\n`;
+
+  text += `*1. Atividades realizadas nas últimas 12h:*\n${value('sup_atividades_realizadas') || '-'}\n\n`;
+  text += `*2. Atividades das próximas 12h:*\n${value('sup_atividades_proximas') || '-'}\n\n`;
+
+  text += `*3. Equipamentos / Integridade:*\n`;
+  text += `- *Preventivas Previstas e Executadas:* ${value('sup_previstas_executadas') || '-'}\n`;
+  text += `- *Falhas Detectadas e Status das correções:* ${value('sup_falhas_status') || '-'}\n`;
+  text += `- *Corretivas Operacionais (telas / camisas / etc):* ${value('sup_corretivas') || '-'}\n`;
+  text += `- *Observações adicionais:* ${value('sup_equip_obs') || '-'}\n\n`;
+
+  text += `*4. ESCP e Simulados:*\n`;
+  text += `- *Estado dos equipamentos:* ${value('sup_escp_estado') || '-'}\n`;
+  text += `- *Pendências:* ${value('sup_escp_pendencias') || '-'}\n`;
+  text += `- *Data do último teste / próximo teste:* ${value('sup_escp_testes') || '-'}\n`;
+  text += `- *Simulado de controle de poço:* ${value('sup_simulado_poco') || '-'}\n`;
+  text += `- *Simulado com UCI:* ${value('sup_simulado_uci') || '-'}\n\n`;
+
+  text += `*5. Pessoas / Comportamento:*\n`;
+  text += `- *Desvios Identificados:* ${value('sup_desvios') || '-'}\n`;
+  text += `- *Pontos de Atenção / Conflitos Identificados:* ${value('sup_pontos_atencao') || '-'}\n`;
+
+  const prontosTable = buildProntosTable(prontos);
+  if (prontosTable) {
+    text += `- *PRONTOS - Colaboradores Alterados e Ações Preventivas:*\n${prontosTable}\n`;
+  }
+  text += `\n`;
+
+  text += `*6. Suporte Operacional:*\n`;
+  text += `- *Falta de Materiais / Recursos logísticos:* ${value('sup_falta_materiais') || '-'}\n`;
+  text += `- *Limitações Operacionais:* ${value('sup_limitacoes') || '-'}\n\n`;
+
+  text += `*7. Incidentes / Acidentes:*\n${value('sup_incidentes') || '-'}\n\n`;
+  text += `*8. Observações Relevantes:*\n${value('sup_observacoes') || '-'}`;
+
+  return text.trim();
+}
+
 function buildSitopOutput() {
   const npts = collectNpts();
   const incidents = collectIncidents();
@@ -524,6 +639,7 @@ function buildEventoOutput() {
 function buildOutput() {
   const type = getActiveFormType();
   if (type === 'sitop') return buildSitopOutput();
+  if (type === 'sitopSupervisor') return buildSitopSupervisorOutput();
   if (type === 'desvio') return buildDesvioOutput();
   return buildEventoOutput();
 }
@@ -542,6 +658,7 @@ function collectState() {
     activeFormType: getActiveFormType(),
     npts: collectNpts(),
     incidents: collectIncidents(),
+    supervisorProntos: collectSupervisorProntos(),
     fields: {}
   };
 
@@ -590,9 +707,11 @@ function applyState(state) {
 
   byId('sitop_npt_list').innerHTML = '';
   byId('sitop_incident_list').innerHTML = '';
+  if (byId('sup_prontos_list')) byId('sup_prontos_list').innerHTML = '';
 
   (state.npts || []).forEach(addNpt);
   (state.incidents || []).forEach(addIncident);
+  (state.supervisorProntos || []).forEach(addSupervisorPronto);
 }
 
 function saveState() {
@@ -631,6 +750,10 @@ function clearCurrent(group) {
     addIncident();
   }
 
+  if (type === 'sitopSupervisor' && group === 'body') {
+    byId('sup_prontos_list').innerHTML = '';
+  }
+
   if (type === 'evento') {
     if (group === 'header') {
       initialiseEventDefaults(false);
@@ -655,6 +778,10 @@ function clearCurrentAll() {
     byId('sitop_incident_list').innerHTML = '';
     addNpt();
     addIncident();
+  }
+
+  if (type === 'sitopSupervisor') {
+    byId('sup_prontos_list').innerHTML = '';
   }
 
   updateOutput();
@@ -694,6 +821,10 @@ function initialiseSitopDefaults() {
   if (!byId('sitop_incident_list').children.length) addIncident();
 }
 
+function initialiseSitopSupervisorDefaults() {
+  if (!value('sup_data')) setValue('sup_data', todayDateInput());
+}
+
 function initialiseDesvioDefaults() {
   if (!value('desvio_dataHora')) setValue('desvio_dataHora', nowDateTimeInput());
 }
@@ -720,6 +851,7 @@ function attachAutoHandlers(root = document) {
 
 function init() {
   fillSelect('sitop_sonda', RIGS);
+  fillSelect('sup_sonda', RIGS);
   fillSelect('desvio_sonda', RIGS);
   fillSelect('evento_rig', RIGS);
   fillSelect('evento_phase', PHASES);
@@ -732,6 +864,7 @@ function init() {
 
   if (!loaded) {
     initialiseSitopDefaults();
+    initialiseSitopSupervisorDefaults();
     initialiseDesvioDefaults();
     initialiseEventDefaults();
     applyPrefsToEmptyHeaderFields();
@@ -739,6 +872,7 @@ function init() {
     applyPrefsToEmptyHeaderFields();
     if (!byId('sitop_npt_list').children.length) addNpt();
     if (!byId('sitop_incident_list').children.length) addIncident();
+    initialiseSitopSupervisorDefaults();
   }
 
   document.querySelectorAll('input[name="formType"]').forEach(input => {
@@ -752,6 +886,11 @@ function init() {
 
   byId('addIncidentBtn').addEventListener('click', () => {
     addIncident();
+    updateOutput();
+  });
+
+  byId('addSupervisorProntoBtn').addEventListener('click', () => {
+    addSupervisorPronto();
     updateOutput();
   });
 

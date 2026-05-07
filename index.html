@@ -34,6 +34,14 @@
         </label>
 
         <label class="selector-option">
+          <input type="radio" name="formType" value="sitopSupervisor" />
+          <span>
+            <strong>SITOP - Supervisor</strong>
+            <small>Supervisão, equipamentos, ESCP, pessoas e suporte</small>
+          </span>
+        </label>
+
+        <label class="selector-option">
           <input type="radio" name="formType" value="desvio" />
           <span>
             <strong>Caça-Desvio</strong>
@@ -142,6 +150,169 @@
             </label>
           </section>
         </section>
+
+        <!-- SITOP SUPERVISOR -->
+        <section id="sitopSupervisorForm" class="form-view hidden">
+          <section class="card">
+            <h2>1. Cabeçalho — SITOP Supervisor</h2>
+
+            <div class="grid two">
+              <label>
+                <span>Sonda</span>
+                <select id="sup_sonda" data-form="sitopSupervisor" data-group="header"></select>
+              </label>
+
+              <label>
+                <span>Poço</span>
+                <input id="sup_poco" data-form="sitopSupervisor" data-group="header" />
+              </label>
+
+              <label>
+                <span>Supervisor</span>
+                <input id="sup_supervisor" data-form="sitopSupervisor" data-group="header" />
+              </label>
+
+              <label>
+                <span>Data</span>
+                <input type="date" id="sup_data" data-form="sitopSupervisor" data-group="body" />
+              </label>
+
+              <label>
+                <span>Turno</span>
+                <select id="sup_turno" data-form="sitopSupervisor" data-group="body">
+                  <option value="">Selecione...</option>
+                  <option>07h–19h</option>
+                  <option>19h–07h</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Turmas embarcadas</span>
+                <input id="sup_turmas" data-form="sitopSupervisor" data-group="body" placeholder="Ex.: 1, 2, 3 e/ou 4" />
+              </label>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>2. Atividades</h2>
+
+            <label>
+              <span>Atividades realizadas nas últimas 12h</span>
+              <textarea id="sup_atividades_realizadas" data-form="sitopSupervisor" data-group="body" rows="4" placeholder="Informar as principais atividades relacionadas à supervisão da sonda executadas nas últimas 12h"></textarea>
+            </label>
+
+            <label>
+              <span>Atividades das próximas 12h</span>
+              <textarea id="sup_atividades_proximas" data-form="sitopSupervisor" data-group="body" rows="4" placeholder="Informar as principais atividades relacionadas à supervisão da sonda previstas para as próximas 12h"></textarea>
+            </label>
+          </section>
+
+          <section class="card">
+            <h2>3. Equipamentos / Integridade</h2>
+
+            <label>
+              <span>Preventivas previstas e executadas</span>
+              <textarea id="sup_previstas_executadas" data-form="sitopSupervisor" data-group="body" rows="3"></textarea>
+            </label>
+
+            <label>
+              <span>Falhas detectadas e status das correções</span>
+              <textarea id="sup_falhas_status" data-form="sitopSupervisor" data-group="body" rows="3"></textarea>
+            </label>
+
+            <label>
+              <span>Corretivas operacionais</span>
+              <textarea id="sup_corretivas" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Ex.: telas, camisas, etc."></textarea>
+            </label>
+
+            <label>
+              <span>Observações adicionais</span>
+              <textarea id="sup_equip_obs" data-form="sitopSupervisor" data-group="body" rows="4" placeholder="Informar falhas, indisponibilidades, equipamentos críticos, atuação da integridade/manutenção e status das correções"></textarea>
+            </label>
+          </section>
+
+          <section class="card">
+            <h2>4. ESCP e Simulados</h2>
+
+            <label>
+              <span>Estado dos equipamentos</span>
+              <textarea id="sup_escp_estado" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Informar se os equipamentos estão operacionais ou relatar falhas pendentes"></textarea>
+            </label>
+
+            <label>
+              <span>Pendências</span>
+              <textarea id="sup_escp_pendencias" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Listar pendências ESCP e simulados"></textarea>
+            </label>
+
+            <label>
+              <span>Data do último teste / próximo teste</span>
+              <input id="sup_escp_testes" data-form="sitopSupervisor" data-group="body" placeholder="Informar data do último teste realizado e/ou próximo teste" />
+            </label>
+
+            <label>
+              <span>Simulado de controle de poço</span>
+              <textarea id="sup_simulado_poco" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Informar quais turmas participaram"></textarea>
+            </label>
+
+            <label>
+              <span>Simulado com UCI</span>
+              <textarea id="sup_simulado_uci" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Informar quais turmas participaram"></textarea>
+            </label>
+          </section>
+
+          <section class="card">
+            <div class="card-title-row">
+              <h2>5. Pessoas / Comportamento</h2>
+              <button type="button" id="addSupervisorProntoBtn">Adicionar PRONTOS</button>
+            </div>
+
+            <label>
+              <span>Desvios identificados</span>
+              <textarea id="sup_desvios" data-form="sitopSupervisor" data-group="body" rows="3"></textarea>
+            </label>
+
+            <label>
+              <span>Pontos de atenção / conflitos identificados</span>
+              <textarea id="sup_pontos_atencao" data-form="sitopSupervisor" data-group="body" rows="4" placeholder="Informar desvios comportamentais relevantes, treinamentos, conflitos ou pontos de atenção com a equipe"></textarea>
+            </label>
+
+            <div class="section-label">PRONTOS - Colaboradores alterados e ações preventivas</div>
+            <div id="sup_prontos_list" class="dynamic-list table-list"></div>
+          </section>
+
+          <section class="card">
+            <h2>6. Suporte Operacional</h2>
+
+            <label>
+              <span>Falta de materiais / recursos logísticos</span>
+              <textarea id="sup_falta_materiais" data-form="sitopSupervisor" data-group="body" rows="3"></textarea>
+            </label>
+
+            <label>
+              <span>Limitações operacionais</span>
+              <textarea id="sup_limitacoes" data-form="sitopSupervisor" data-group="body" rows="4" placeholder="Informar limitações operacionais, falta de materiais, recursos, pessoal ou qualquer dificuldade que impacte a continuidade operacional"></textarea>
+            </label>
+          </section>
+
+          <section class="card">
+            <h2>7. Incidentes / Acidentes</h2>
+
+            <label>
+              <span>Descrição breve + status + data/hora + reporte</span>
+              <textarea id="sup_incidentes" data-form="sitopSupervisor" data-group="body" rows="4" placeholder="Informar descrição breve, status, data/hora e hora do reporte ao CCOS / Gestão DW"></textarea>
+            </label>
+          </section>
+
+          <section class="card">
+            <h2>8. Observações Relevantes</h2>
+
+            <label>
+              <span>Observações relevantes</span>
+              <textarea id="sup_observacoes" data-form="sitopSupervisor" data-group="body" rows="5" placeholder="Riscos operacionais, necessidade de suporte, ações em andamento, pontos de atenção ou necessidade de decisão"></textarea>
+            </label>
+          </section>
+        </section>
+
 
         <!-- CAÇA DESVIO -->
         <section id="desvioForm" class="form-view hidden">

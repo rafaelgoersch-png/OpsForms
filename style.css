@@ -128,7 +128,7 @@ p,
 
 .selector-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 14px;
 }
 
@@ -211,6 +211,14 @@ p,
 
 .grid.three {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.full-span {
+  grid-column: 1 / -1;
+}
+
+.table-list .row {
+  grid-template-columns: minmax(180px, 0.7fr) minmax(240px, 1.3fr) auto;
 }
 
 label {
@@ -519,4 +527,9 @@ button.danger {
     gap: 8px;
     font-size: 12px;
   }
+}
+
+/* Ajuste específico para a tabela dinâmica do PRONTOS no SITOP Supervisor. */
+.table-list .row {
+  grid-template-columns: minmax(180px, 0.7fr) minmax(240px, 1.3fr) auto;
 }
