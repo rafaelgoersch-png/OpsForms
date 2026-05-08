@@ -858,6 +858,15 @@ function attachAutoHandlers(root = document) {
   });
 }
 
+function attachSupervisorTurmasHandlers() {
+  document.querySelectorAll('input[name="sup_turmas"]').forEach(input => {
+    input.removeEventListener('click', updateOutput);
+    input.removeEventListener('change', updateOutput);
+    input.addEventListener('click', () => setTimeout(updateOutput, 0));
+    input.addEventListener('change', updateOutput);
+  });
+}
+
 function init() {
   fillSelect('sitop_sonda', RIGS);
   fillSelect('sup_sonda', RIGS);
@@ -910,6 +919,7 @@ function init() {
   byId('clearAllBtn').addEventListener('click', clearCurrentAll);
 
   attachAutoHandlers();
+  attachSupervisorTurmasHandlers();
 
   switchForm(getActiveFormType());
   updateOutput();
