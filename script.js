@@ -264,6 +264,24 @@ function formatListPT(items) {
   return `${cleaned.slice(0, -1).join(', ')} e ${cleaned[cleaned.length - 1]}`;
 }
 
+function getSupervisorTurmasValues() {
+  return [...document.querySelectorAll('input[name="sup_turmas"]')]
+    .filter(input => input.checked)
+    .map(input => input.value);
+}
+
+function syncSupervisorTurmasField() {
+  const hidden = byId('sup_turmas_embarcadas');
+  if (!hidden) return '';
+
+  hidden.value = formatListPT(getSupervisorTurmasValues());
+  return hidden.value;
+}
+
+function getSupervisorTurmasText() {
+  return syncSupervisorTurmasField() || '-';
+}
+
 function optionalLine(label, content) {
   if (!content) return '';
   return `${label}: ${content}`;
@@ -436,7 +454,7 @@ function buildSitopSupervisorOutput() {
   text += `*Data:* ${formatDateBR(value('sup_data')) || '-'}\n`;
   text += `*Turno:* ${value('sup_turno') || '-'}\n`;
   text += `*Supervisor:* ${value('sup_supervisor') || '-'}\n`;
-  text += `*Turmas embarcadas:* ${formatListPT(getCheckedValues('sup_turmas')) || '-'}\n\n`;
+  text += `*Turmas embarcadas:* ${getSupervisorTurmasText()}\n\n`;
 
   text += `*1. Atividades realizadas nas últimas 12h:*\n${value('sup_atividades_realizadas') || '-'}\n\n`;
   text += `*2. Atividades das próximas 12h:*\n${value('sup_atividades_proximas') || '-'}\n\n`;
@@ -654,6 +672,7 @@ function buildOutput() {
 }
 
 function updateOutput() {
+  syncSupervisorTurmasField();
   toggleEventTimeFields();
   toggleEventActionField();
   updateEventCriticalityVisual();
@@ -721,7 +740,9 @@ function applyState(state) {
   (state.npts || []).forEach(addNpt);
   (state.incidents || []).forEach(addIncident);
   (state.supervisorProntos || []).forEach(addSupervisorPronto);
+  syncSupervisorTurmasField();
 }
+
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
@@ -859,12 +880,26 @@ function attachAutoHandlers(root = document) {
 }
 
 function attachSupervisorTurmasHandlers() {
+  const updateAfterCheckboxToggle = () => {
+    syncSupervisorTurmasField();
+    updateOutput();
+  };
+
   document.querySelectorAll('input[name="sup_turmas"]').forEach(input => {
-    input.removeEventListener('click', updateOutput);
-    input.removeEventListener('change', updateOutput);
-    input.addEventListener('click', () => setTimeout(updateOutput, 0));
-    input.addEventListener('change', updateOutput);
+    input.removeEventListener('input', updateAfterCheckboxToggle);
+    input.removeEventListener('change', updateAfterCheckboxToggle);
+    input.addEventListener('input', updateAfterCheckboxToggle);
+    input.addEventListener('change', updateAfterCheckboxToggle);
   });
+
+  const container = document.querySelector('.turmas-checks');
+  if (container) {
+    container.addEventListener('click', event => {
+      if (event.target.closest('label')) {
+        setTimeout(updateAfterCheckboxToggle, 0);
+      }
+    });
+  }
 }
 
 function init() {
