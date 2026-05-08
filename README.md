@@ -57,7 +57,7 @@ A regra é manter aqui somente a estrutura HTML necessária. A lógica deve fica
 
 Contém o visual da aplicação:
 
-- tema escuro;
+- temas visuais da aplicação;
 - grid dos formulários;
 - cards;
 - inputs;
@@ -65,6 +65,29 @@ Contém o visual da aplicação:
 - tabelas;
 - checkboxes;
 - responsividade para celular.
+
+## Temas visuais
+
+A aplicação possui três temas:
+
+1. **Escuro** — tema padrão.
+2. **Claro** — melhor para ambientes muito iluminados ou impressão visual.
+3. **Pink anos 1980** — tema alternativo, visual retrô/neon.
+
+O tema é escolhido no topo da aplicação e fica salvo no navegador via `localStorage`.
+
+Para criar um novo tema, edite somente as variáveis CSS em `css/style.css`, seguindo o padrão:
+
+```css
+body[data-theme="novoTema"] {
+  --bg: ...;
+  --panel: ...;
+  --text: ...;
+  --accent: ...;
+}
+```
+
+Depois, adicione a opção correspondente no seletor `themeSelect` do `index.html` e na lista permitida dentro de `js/app.js`.
 
 ### `js/config.js`
 
@@ -400,3 +423,15 @@ Configuração recomendada:
 - atualiza o README para documentar a estrutura modular;
 - adiciona orientação para criação de novos relatórios;
 - inclui checklist de manutenção e publicação.
+
+
+### v9
+
+- adiciona seletor de temas;
+- mantém o tema escuro como padrão;
+- inclui tema claro e tema pink anos 1980.
+
+### v10
+
+- adiciona o campo **Melhoria sugerida** no Caça-Desvio;
+- inclui **Melhoria sugerida** no texto de saída para WhatsApp/Teams logo após **Ação imediata tomada**.

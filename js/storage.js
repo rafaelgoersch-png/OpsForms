@@ -76,7 +76,7 @@
     };
 
     document.querySelectorAll('input, select, textarea').forEach(el => {
-      if (el.name === 'formType') return;
+      if (el.name === 'formType' || el.id === 'themeSelect') return;
 
       if (el.type === 'checkbox') {
         if (!state.fields[el.name]) state.fields[el.name] = [];
@@ -102,7 +102,7 @@
     setActiveFormType(state.activeFormType || 'sitop');
 
     document.querySelectorAll('input, select, textarea').forEach(el => {
-      if (el.name === 'formType') return;
+      if (el.name === 'formType' || el.id === 'themeSelect') return;
 
       if (el.type === 'checkbox') {
         el.checked = Array.isArray(state.fields?.[el.name]) && state.fields[el.name].includes(el.value);

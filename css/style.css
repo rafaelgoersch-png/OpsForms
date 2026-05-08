@@ -5,6 +5,15 @@
   --line: #303a47;
   --text: #e7edf5;
   --muted: #9aa7b5;
+  --label: #cdd7e3;
+  --surface: #0b0f14;
+  --card-bg: rgba(21, 27, 35, 0.94);
+  --topbar-bg: rgba(21, 27, 35, 0.9);
+  --preview-header-bg: rgba(31, 38, 48, 0.82);
+  --checked-bg: rgba(31, 111, 235, 0.22);
+  --focus-ring: rgba(101, 183, 255, 0.12);
+  --bg-radial-1: rgba(31, 111, 235, 0.18);
+  --bg-radial-2: rgba(86, 211, 100, 0.08);
   --accent: #65b7ff;
   --accent-2: #1f6feb;
   --danger: #ff6b6b;
@@ -12,6 +21,50 @@
   --ok: #56d364;
   --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
   --radius: 18px;
+}
+
+body[data-theme="light"] {
+  --bg: #f4f7fb;
+  --panel: #ffffff;
+  --panel-2: #edf2f7;
+  --line: #c9d4e1;
+  --text: #142033;
+  --muted: #526173;
+  --label: #29384a;
+  --surface: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.96);
+  --topbar-bg: rgba(255, 255, 255, 0.96);
+  --preview-header-bg: rgba(237, 242, 247, 0.94);
+  --checked-bg: rgba(31, 111, 235, 0.12);
+  --focus-ring: rgba(31, 111, 235, 0.16);
+  --bg-radial-1: rgba(31, 111, 235, 0.12);
+  --bg-radial-2: rgba(86, 211, 100, 0.1);
+  --danger-bg: #ffe5e8;
+  --shadow: 0 18px 45px rgba(20, 32, 51, 0.12);
+}
+
+body[data-theme="pink80"] {
+  --bg: #160020;
+  --panel: #2a0638;
+  --panel-2: #3f0b55;
+  --line: #ff4fd8;
+  --text: #fff2ff;
+  --muted: #ffd3f6;
+  --label: #ffffff;
+  --surface: #21002f;
+  --card-bg: rgba(42, 6, 56, 0.96);
+  --topbar-bg: rgba(42, 6, 56, 0.96);
+  --preview-header-bg: rgba(63, 11, 85, 0.92);
+  --checked-bg: rgba(255, 79, 216, 0.24);
+  --focus-ring: rgba(0, 229, 255, 0.2);
+  --bg-radial-1: rgba(255, 0, 200, 0.34);
+  --bg-radial-2: rgba(0, 229, 255, 0.22);
+  --accent: #00e5ff;
+  --accent-2: #ff4fd8;
+  --danger: #ff7a7a;
+  --danger-bg: #5b102e;
+  --ok: #70ff9f;
+  --shadow: 0 18px 55px rgba(255, 0, 200, 0.18);
 }
 
 * {
@@ -22,8 +75,8 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(31, 111, 235, 0.18), transparent 32rem),
-    radial-gradient(circle at bottom right, rgba(86, 211, 100, 0.08), transparent 28rem),
+    radial-gradient(circle at top left, var(--bg-radial-1), transparent 32rem),
+    radial-gradient(circle at bottom right, var(--bg-radial-2), transparent 28rem),
     var(--bg);
   color: var(--text);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -49,7 +102,7 @@ textarea {
   gap: 24px;
   padding: 22px 24px;
   margin-bottom: 18px;
-  background: rgba(21, 27, 35, 0.9);
+  background: var(--topbar-bg);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -88,6 +141,34 @@ p,
   justify-content: flex-end;
 }
 
+.theme-control {
+  display: grid;
+  gap: 6px;
+  min-width: 170px;
+}
+
+.theme-control span {
+  color: var(--label);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.theme-control select {
+  min-height: 40px;
+  padding: 8px 11px;
+}
+
+body[data-theme="pink80"] .card,
+body[data-theme="pink80"] .preview-panel,
+body[data-theme="pink80"] .topbar {
+  box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.16), var(--shadow);
+}
+
+body[data-theme="pink80"] h1,
+body[data-theme="pink80"] h2 {
+  text-shadow: 0 0 12px rgba(255, 79, 216, 0.55);
+}
+
 .card-title-row {
   justify-content: space-between;
   margin-bottom: 12px;
@@ -112,7 +193,7 @@ p,
 
 .card,
 .preview-panel {
-  background: rgba(21, 27, 35, 0.94);
+  background: var(--card-bg);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -141,13 +222,13 @@ p,
   padding: 14px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: #0b0f14;
+  background: var(--surface);
   cursor: pointer;
 }
 
 .selector-option:has(input:checked) {
   border-color: var(--accent);
-  background: rgba(31, 111, 235, 0.22);
+  background: var(--checked-bg);
 }
 
 .selector-option small {
@@ -166,7 +247,7 @@ p,
 .preview-footer {
   justify-content: space-between;
   padding: 18px 20px;
-  background: rgba(31, 38, 48, 0.82);
+  background: var(--preview-header-bg);
   border-bottom: 1px solid var(--line);
 }
 
@@ -197,7 +278,7 @@ p,
   color: var(--text);
   font-size: 15px;
   line-height: 1.55;
-  background: #0b0f14;
+  background: var(--surface);
 }
 
 .grid {
@@ -243,7 +324,7 @@ label {
 label span,
 .section-label,
 legend {
-  color: #cdd7e3;
+  color: var(--label);
   font-weight: 650;
   font-size: 14px;
 }
@@ -259,7 +340,7 @@ textarea {
   border: 1px solid var(--line);
   border-radius: 13px;
   color: var(--text);
-  background: #0b0f14;
+  background: var(--surface);
   padding: 12px 13px;
   outline: none;
 }
@@ -272,7 +353,7 @@ input:focus,
 select:focus,
 textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(101, 183, 255, 0.12);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 button {
@@ -326,7 +407,7 @@ button.danger {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #0b0f14;
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 9px 12px;
@@ -369,7 +450,7 @@ button.danger {
 .checkbox-stack label:has(input:checked),
 .segmented label:has(input:checked) {
   border-color: var(--accent);
-  background: rgba(31, 111, 235, 0.22);
+  background: var(--checked-bg);
 }
 
 .classification-grid {
@@ -404,7 +485,7 @@ button.danger {
   padding: 16px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: #0b0f14;
+  background: var(--surface);
   margin-top: 9px;
 }
 
@@ -435,7 +516,7 @@ button.danger {
   padding: 14px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: #0b0f14;
+  background: var(--surface);
 }
 
 .dynamic-item .row {
@@ -546,4 +627,17 @@ button.danger {
 /* Ajuste específico para a tabela dinâmica do PRONTOS no SITOP Supervisor. */
 .table-list .row {
   grid-template-columns: minmax(180px, 0.7fr) minmax(240px, 1.3fr) auto;
+}
+
+
+body[data-theme="pink80"] button.primary {
+  background: linear-gradient(180deg, #ff4fd8, #b800ff);
+  border-color: #00e5ff;
+  color: #ffffff;
+}
+
+body[data-theme="light"] button.primary {
+  background: linear-gradient(180deg, #2f81f7, #1f6feb);
+  border-color: #1f6feb;
+  color: #ffffff;
 }

@@ -22,6 +22,24 @@
   const outputText = byId('outputText');
   const saveStatus = byId('saveStatus');
   const copyFeedback = byId('copyFeedback');
+  const themeSelect = byId('themeSelect');
+  const THEME_KEY = 'formularios-operacionais-theme-v1';
+
+  function applyTheme(theme) {
+    const normalized = ['dark', 'light', 'pink80'].includes(theme) ? theme : 'dark';
+    document.body.dataset.theme = normalized;
+    if (themeSelect) themeSelect.value = normalized;
+    localStorage.setItem(THEME_KEY, normalized);
+  }
+
+  function initTheme() {
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
+    applyTheme(savedTheme);
+
+    if (themeSelect) {
+      themeSelect.addEventListener('change', () => applyTheme(themeSelect.value));
+    }
+  }
 
   function getActiveFormType() {
     const checked = document.querySelector('input[name="formType"]:checked');
@@ -202,6 +220,7 @@
   }
 
   function init() {
+    initTheme();
     sitop.setCallbacks({ attachAutoHandlers, updateOutput });
     sitopSupervisor.setCallbacks({ attachAutoHandlers, updateOutput });
 
