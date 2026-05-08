@@ -1,0 +1,156 @@
+(function () {
+  const { STORAGE_KEY, PREFS_KEY } = window.OpsConfig;
+  const { byId, value, setValue } = window.OpsUtils;
+
+  function loadPrefs() {
+    try {
+      return JSON.parse(localStorage.getItem(PREFS_KEY)) || {};
+    } catch {
+      return {};
+    }
+  }
+
+  function savePrefs(prefs) {
+    localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
+  }
+
+  function getRigFieldIds() {
+    return ['sitop_sonda', 'sup_sonda', 'desvio_sonda', 'evento_rig'];
+  }
+
+  function getWellFieldIds() {
+    return ['sitop_poco', 'sup_poco', 'desvio_poco', 'evento_well'];
+  }
+
+  function getCurrentRigValue() {
+    for (const id of getRigFieldIds()) {
+      const val = value(id);
+      if (val) return val;
+    }
+    return '';
+  }
+
+  function getCurrentWellValue() {
+    for (const id of getWellFieldIds()) {
+      const val = value(id);
+      if (val) return val;
+    }
+    return '';
+  }
+
+  function updatePrefsFromFields() {
+    const prefs = loadPrefs();
+    const rig = getCurrentRigValue();
+    const well = getCurrentWellValue();
+
+    if (rig) prefs.lastRig = rig;
+    if (well) prefs.lastWell = well;
+
+    savePrefs(prefs);
+  }
+
+  function applyPrefsToEmptyHeaderFields() {
+    const prefs = loadPrefs();
+
+    if (prefs.lastRig) {
+      getRigFieldIds().forEach(id => {
+        if (byId(id) && !value(id)) setValue(id, prefs.lastRig);
+      });
+    }
+
+    if (prefs.lastWell) {
+      getWellFieldIds().forEach(id => {
+        if (byId(id) && !value(id)) setValue(id, prefs.lastWell);
+      });
+    }
+  }
+
+  function collectState(activeFormType) {
+    const { sitop, sitopSupervisor } = window.OpsFormsModules;
+    const state = {
+      activeFormType,
+      npts: sitop.collectNpts(),
+      incidents: sitop.collectIncidents(),
+      supervisorProntos: sitopSupervisor.collectProntos(),
+      fields: {}
+    };
+
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+      if (el.name === 'formType') return;
+
+      if (el.type === 'checkbox') {
+        if (!state.fields[el.name]) state.fields[el.name] = [];
+        if (el.checked) state.fields[el.name].push(el.value);
+        return;
+      }
+
+      if (el.type === 'radio') {
+        if (el.checked) state.fields[el.name] = el.value;
+        return;
+      }
+
+      if (el.id) state.fields[el.id] = el.value;
+    });
+
+    return state;
+  }
+
+  function applyState(state, setActiveFormType) {
+    const { sitop, sitopSupervisor } = window.OpsFormsModules;
+    if (!state || typeof state !== 'object') return;
+
+    setActiveFormType(state.activeFormType || 'sitop');
+
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+      if (el.name === 'formType') return;
+
+      if (el.type === 'checkbox') {
+        el.checked = Array.isArray(state.fields?.[el.name]) && state.fields[el.name].includes(el.value);
+        return;
+      }
+
+      if (el.type === 'radio') {
+        el.checked = state.fields?.[el.name] === el.value;
+        return;
+      }
+
+      if (el.id && Object.prototype.hasOwnProperty.call(state.fields || {}, el.id)) {
+        el.value = state.fields[el.id];
+      }
+    });
+
+    if (byId('sitop_npt_list')) byId('sitop_npt_list').innerHTML = '';
+    if (byId('sitop_incident_list')) byId('sitop_incident_list').innerHTML = '';
+    if (byId('sup_prontos_list')) byId('sup_prontos_list').innerHTML = '';
+
+    (state.npts || []).forEach(sitop.addNpt);
+    (state.incidents || []).forEach(sitop.addIncident);
+    (state.supervisorProntos || []).forEach(sitopSupervisor.addPronto);
+    sitopSupervisor.syncTurmasField();
+  }
+
+  function saveState(activeFormType) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState(activeFormType)));
+  }
+
+  function loadState(setActiveFormType) {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+
+    try {
+      applyState(JSON.parse(raw), setActiveFormType);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  window.OpsStorage = {
+    updatePrefsFromFields,
+    applyPrefsToEmptyHeaderFields,
+    collectState,
+    applyState,
+    saveState,
+    loadState
+  };
+})();

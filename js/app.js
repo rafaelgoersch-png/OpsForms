@@ -1,0 +1,222 @@
+(function () {
+  const {
+    byId,
+    value,
+    setValue,
+    fillSelect,
+    fillCheckboxGroup
+  } = window.OpsUtils;
+
+  const {
+    RIGS,
+    PHASES,
+    ACTIVITIES,
+    EVENT_CATEGORIES,
+    EVENT_IMPACTS,
+    EVENT_APPLICABLE_TO
+  } = window.OpsConfig;
+
+  const { sitop, sitopSupervisor, desvio, evento } = window.OpsFormsModules;
+  const storage = window.OpsStorage;
+
+  const outputText = byId('outputText');
+  const saveStatus = byId('saveStatus');
+  const copyFeedback = byId('copyFeedback');
+
+  function getActiveFormType() {
+    const checked = document.querySelector('input[name="formType"]:checked');
+    return checked ? checked.value : 'sitop';
+  }
+
+  function setActiveFormType(type) {
+    document.querySelectorAll('input[name="formType"]').forEach(input => {
+      input.checked = input.value === type;
+    });
+  }
+
+  function switchForm(type) {
+    document.querySelectorAll('.form-view').forEach(view => view.classList.add('hidden'));
+    const view = byId(`${type}Form`);
+    if (view) view.classList.remove('hidden');
+    updateOutput();
+  }
+
+  function buildOutput() {
+    const type = getActiveFormType();
+    if (type === 'sitop') return sitop.buildOutput();
+    if (type === 'sitopSupervisor') return sitopSupervisor.buildOutput();
+    if (type === 'desvio') return desvio.buildOutput();
+    return evento.buildOutput();
+  }
+
+  function updateOutput() {
+    sitopSupervisor.syncTurmasField();
+    evento.toggleTimeFields();
+    evento.toggleActionField();
+    evento.updateCriticalityVisual();
+    storage.updatePrefsFromFields();
+    outputText.textContent = buildOutput();
+    storage.saveState(getActiveFormType());
+    saveStatus.textContent = 'Salvo localmente';
+  }
+
+  function clearCurrent(group) {
+    const type = getActiveFormType();
+
+    document.querySelectorAll(`[data-form="${type}"][data-group="${group}"]`).forEach(el => {
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        el.checked = false;
+        return;
+      }
+
+      el.value = '';
+    });
+
+    if (type === 'sitop' && group === 'body') {
+      sitop.clearBodyLists();
+    }
+
+    if (type === 'sitopSupervisor' && group === 'body') {
+      sitopSupervisor.clearBodyLists();
+    }
+
+    if (type === 'evento') {
+      if (group === 'header') {
+        evento.initialiseDefaults(false);
+        storage.applyPrefsToEmptyHeaderFields();
+      }
+      if (group === 'body') {
+        evento.resetBodyDefaults();
+      }
+    }
+
+    updateOutput();
+  }
+
+  function clearCurrentAll() {
+    clearCurrent('header');
+    clearCurrent('body');
+
+    const type = getActiveFormType();
+    if (type === 'sitop') {
+      sitop.clearBodyLists();
+    }
+
+    if (type === 'sitopSupervisor') {
+      sitopSupervisor.clearBodyLists();
+    }
+
+    updateOutput();
+  }
+
+  async function copyOutput() {
+    const text = outputText.textContent;
+
+    try {
+      await navigator.clipboard.writeText(text);
+      copyFeedback.textContent = 'Texto copiado.';
+    } catch {
+      const temp = document.createElement('textarea');
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      copyFeedback.textContent = 'Texto copiado.';
+    }
+
+    setTimeout(() => copyFeedback.textContent = '', 2200);
+  }
+
+  async function openWhatsApp() {
+    const text = outputText.textContent;
+
+    await copyOutput();
+
+    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  function attachAutoHandlers(root = document) {
+    root.querySelectorAll('input, select, textarea').forEach(el => {
+      el.removeEventListener('input', updateOutput);
+      el.removeEventListener('change', updateOutput);
+      el.addEventListener('input', updateOutput);
+      el.addEventListener('change', updateOutput);
+    });
+  }
+
+  function initSelectsAndGroups() {
+    fillSelect('sitop_sonda', RIGS);
+    fillSelect('sup_sonda', RIGS);
+    fillSelect('desvio_sonda', RIGS);
+    fillSelect('evento_rig', RIGS);
+    fillSelect('evento_phase', PHASES);
+    fillSelect('evento_activity', ACTIVITIES);
+    fillCheckboxGroup('evento_categoryGroup', 'evento_categories', EVENT_CATEGORIES, 'header');
+    fillCheckboxGroup('evento_impactGroup', 'evento_impacts', EVENT_IMPACTS, 'body');
+    fillCheckboxGroup('evento_applicableGroup', 'evento_applicableTo', EVENT_APPLICABLE_TO, 'body');
+  }
+
+  function initDefaults(loaded) {
+    if (!loaded) {
+      sitop.initialiseDefaults();
+      sitopSupervisor.initialiseDefaults();
+      desvio.initialiseDefaults();
+      evento.initialiseDefaults();
+      storage.applyPrefsToEmptyHeaderFields();
+      return;
+    }
+
+    storage.applyPrefsToEmptyHeaderFields();
+    if (byId('sitop_npt_list') && !byId('sitop_npt_list').children.length) sitop.addNpt();
+    if (byId('sitop_incident_list') && !byId('sitop_incident_list').children.length) sitop.addIncident();
+    sitopSupervisor.initialiseDefaults();
+  }
+
+  function bindStaticButtons() {
+    document.querySelectorAll('input[name="formType"]').forEach(input => {
+      input.addEventListener('change', () => switchForm(input.value));
+    });
+
+    byId('addNptBtn').addEventListener('click', () => {
+      sitop.addNpt();
+      updateOutput();
+    });
+
+    byId('addIncidentBtn').addEventListener('click', () => {
+      sitop.addIncident();
+      updateOutput();
+    });
+
+    byId('addSupervisorProntoBtn').addEventListener('click', () => {
+      sitopSupervisor.addPronto();
+      updateOutput();
+    });
+
+    byId('copyTopBtn').addEventListener('click', openWhatsApp);
+    byId('copyBottomBtn').addEventListener('click', openWhatsApp);
+    byId('clearHeaderBtn').addEventListener('click', () => clearCurrent('header'));
+    byId('clearBodyBtn').addEventListener('click', () => clearCurrent('body'));
+    byId('clearAllBtn').addEventListener('click', clearCurrentAll);
+  }
+
+  function init() {
+    sitop.setCallbacks({ attachAutoHandlers, updateOutput });
+    sitopSupervisor.setCallbacks({ attachAutoHandlers, updateOutput });
+
+    initSelectsAndGroups();
+
+    const loaded = storage.loadState(setActiveFormType);
+    initDefaults(loaded);
+
+    bindStaticButtons();
+    attachAutoHandlers();
+    sitopSupervisor.attachTurmasHandlers();
+
+    switchForm(getActiveFormType());
+    updateOutput();
+  }
+
+  init();
+})();
