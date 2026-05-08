@@ -22,6 +22,25 @@
   const outputText = byId('outputText');
   const saveStatus = byId('saveStatus');
   const copyFeedback = byId('copyFeedback');
+  const THEME_KEY = 'opsFormsTheme';
+  const DEFAULT_THEME = 'dark';
+
+  function getStoredTheme() {
+    return localStorage.getItem(THEME_KEY) || DEFAULT_THEME;
+  }
+
+  function setTheme(theme) {
+    const selectedTheme = ['dark', 'light', 'pink80'].includes(theme) ? theme : DEFAULT_THEME;
+    document.body.dataset.theme = selectedTheme;
+    localStorage.setItem(THEME_KEY, selectedTheme);
+
+    const themeSelect = byId('themeSelect');
+    if (themeSelect) themeSelect.value = selectedTheme;
+  }
+
+  function initTheme() {
+    setTheme(getStoredTheme());
+  }
 
   function getActiveFormType() {
     const checked = document.querySelector('input[name="formType"]:checked');
@@ -194,6 +213,10 @@
       updateOutput();
     });
 
+    byId('themeSelect').addEventListener('change', event => {
+      setTheme(event.target.value);
+    });
+
     byId('copyTopBtn').addEventListener('click', openWhatsApp);
     byId('copyBottomBtn').addEventListener('click', openWhatsApp);
     byId('clearHeaderBtn').addEventListener('click', () => clearCurrent('header'));
@@ -202,6 +225,8 @@
   }
 
   function init() {
+    initTheme();
+
     sitop.setCallbacks({ attachAutoHandlers, updateOutput });
     sitopSupervisor.setCallbacks({ attachAutoHandlers, updateOutput });
 
