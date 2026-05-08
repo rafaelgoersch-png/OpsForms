@@ -13,7 +13,7 @@ Atualmente existem 4 reportes funcionais:
 3. **Caça-Desvio**
 4. **Captura de Evento / Lições Aprendidas**
 
-O rascunho dos formulários é salvo no navegador via `localStorage`. A preferência de tema visual também fica salva localmente no navegador.
+O rascunho dos formulários é salvo no navegador via `localStorage`.
 
 ---
 
@@ -57,7 +57,7 @@ A regra é manter aqui somente a estrutura HTML necessária. A lógica deve fica
 
 Contém o visual da aplicação:
 
-- temas visuais: escuro, claro e rosa pink anos 1980;
+- tema escuro;
 - grid dos formulários;
 - cards;
 - inputs;
@@ -118,66 +118,6 @@ Cada arquivo dentro desta pasta concentra a lógica específica de um relatório
 | `sitop-supervisor.js` | SITOP - Supervisor | Geração do texto, turmas embarcadas, datas de teste e tabela PRONTOS |
 | `desvio.js` | Caça-Desvio | Geração do texto do reporte de desvio |
 | `evento.js` | Captura de Evento / Lições Aprendidas | Geração do texto de eventos, criticidade e campos condicionais |
-
----
-
-## Temas visuais
-
-A aplicação possui três temas:
-
-1. **Escuro** — padrão operacional original.
-2. **Claro** — melhor para ambientes iluminados, apresentações e leitura em tela clara.
-3. **Rosa pink anos 1980** — tema alternativo com visual retrô/neon.
-
-O seletor de tema fica no topo da aplicação. A escolha é salva no navegador usando `localStorage`, então o usuário não precisa selecionar o tema toda vez que abrir a página.
-
-### Como manter ou criar temas
-
-Os temas ficam concentrados em `css/style.css`, usando variáveis CSS.
-
-A regra é: **não espalhar cores fixas pelo CSS**. Use variáveis.
-
-Exemplo simplificado:
-
-```css
-:root {
-  --bg: #0d1117;
-  --panel-alpha: rgba(21, 27, 35, 0.94);
-  --text: #e7edf5;
-  --accent: #65b7ff;
-}
-
-body[data-theme="light"] {
-  --bg: #f4f6fb;
-  --panel-alpha: rgba(255, 255, 255, 0.96);
-  --text: #15202f;
-  --accent: #2563eb;
-}
-```
-
-Para criar um novo tema:
-
-1. Adicione um novo bloco em `css/style.css`, por exemplo:
-
-```css
-body[data-theme="novoTema"] {
-  --bg: ...;
-  --text: ...;
-  --accent: ...;
-}
-```
-
-2. Adicione a opção no seletor de tema em `index.html`:
-
-```html
-<option value="novoTema">Novo Tema</option>
-```
-
-3. Inclua o valor permitido em `js/app.js`, na função `setTheme()`:
-
-```javascript
-['dark', 'light', 'pink80', 'novoTema']
-```
 
 ---
 

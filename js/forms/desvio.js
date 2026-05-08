@@ -15,6 +15,7 @@
     text += `*Desvio identificado:*\n${value('desvio_desvio') || '-'}\n\n`;
     text += `*Risco associado:*\n${value('desvio_risco') || '-'}\n\n`;
     text += `*Ação imediata tomada:*\n${value('desvio_acao') || '-'}\n\n`;
+    text += `*Melhoria sugerida:*\n${value('desvio_melhoria') || '-'}\n\n`;
     text += `*Status atual:*\n${getRadioValue('desvio_status') || '-'}\n\n`;
     text += `*Setor responsável pela correção:*\n${setor.length ? setor.join(' / ') : '-'}\n\n`;
     text += `*Classificação do desvio:*\n${getRadioValue('desvio_classificacao') || '-'}\n\n`;

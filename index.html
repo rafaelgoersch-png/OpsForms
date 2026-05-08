@@ -15,14 +15,6 @@
       </div>
 
       <div class="top-actions">
-        <label class="theme-control" for="themeSelect">
-          <span>Tema</span>
-          <select id="themeSelect" aria-label="Selecionar tema visual">
-            <option value="dark">Escuro</option>
-            <option value="light">Claro</option>
-            <option value="pink80">Rosa pink anos 1980</option>
-          </select>
-        </label>
         <button id="copyTopBtn" class="primary" type="button">Copiar texto e abrir WhatsApp</button>
         <button id="clearHeaderBtn" type="button">Limpar cabeçalho</button>
         <button id="clearBodyBtn" type="button">Limpar dados</button>
@@ -379,6 +371,11 @@
             <label>
               <span>Ação imediata tomada</span>
               <textarea id="desvio_acao" data-form="desvio" data-group="body" rows="4"></textarea>
+            </label>
+
+            <label>
+              <span>Melhoria sugerida</span>
+              <textarea id="desvio_melhoria" data-form="desvio" data-group="body" rows="4"></textarea>
             </label>
 
             <div class="section-label">Status atual</div>
