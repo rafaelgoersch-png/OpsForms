@@ -217,6 +217,20 @@ p,
   grid-column: 1 / -1;
 }
 
+.field-block {
+  display: grid;
+  gap: 8px;
+}
+
+.turmas-checks {
+  margin: 0;
+}
+
+.turmas-checks label {
+  min-width: 54px;
+  justify-content: center;
+}
+
 .table-list .row {
   grid-template-columns: minmax(180px, 0.7fr) minmax(240px, 1.3fr) auto;
 }

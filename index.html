@@ -186,10 +186,15 @@
                 </select>
               </label>
 
-              <label>
-                <span>Turmas embarcadas</span>
-                <input id="sup_turmas" data-form="sitopSupervisor" data-group="body" placeholder="Ex.: 1, 2, 3 e/ou 4" />
-              </label>
+              <div class="field-block">
+                <span class="section-label">Turmas embarcadas</span>
+                <div class="chips turmas-checks">
+                  <label><input type="checkbox" name="sup_turmas" value="1" data-form="sitopSupervisor" data-group="body" /> <span>1</span></label>
+                  <label><input type="checkbox" name="sup_turmas" value="2" data-form="sitopSupervisor" data-group="body" /> <span>2</span></label>
+                  <label><input type="checkbox" name="sup_turmas" value="3" data-form="sitopSupervisor" data-group="body" /> <span>3</span></label>
+                  <label><input type="checkbox" name="sup_turmas" value="4" data-form="sitopSupervisor" data-group="body" /> <span>4</span></label>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -244,10 +249,17 @@
               <textarea id="sup_escp_pendencias" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Listar pendências ESCP e simulados"></textarea>
             </label>
 
-            <label>
-              <span>Data do último teste / próximo teste</span>
-              <input id="sup_escp_testes" data-form="sitopSupervisor" data-group="body" placeholder="Informar data do último teste realizado e/ou próximo teste" />
-            </label>
+            <div class="grid two">
+              <label>
+                <span>Data do último teste</span>
+                <input type="date" id="sup_escp_ultimo_teste" data-form="sitopSupervisor" data-group="body" />
+              </label>
+
+              <label>
+                <span>Data do próximo teste</span>
+                <input type="date" id="sup_escp_proximo_teste" data-form="sitopSupervisor" data-group="body" />
+              </label>
+            </div>
 
             <label>
               <span>Simulado de controle de poço</span>

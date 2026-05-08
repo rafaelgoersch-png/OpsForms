@@ -256,6 +256,14 @@ function getCheckedValues(name) {
   return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(input => input.value);
 }
 
+function formatListPT(items) {
+  const cleaned = items.filter(Boolean);
+  if (!cleaned.length) return '';
+  if (cleaned.length === 1) return cleaned[0];
+  if (cleaned.length === 2) return `${cleaned[0]} e ${cleaned[1]}`;
+  return `${cleaned.slice(0, -1).join(', ')} e ${cleaned[cleaned.length - 1]}`;
+}
+
 function optionalLine(label, content) {
   if (!content) return '';
   return `${label}: ${content}`;
@@ -428,7 +436,7 @@ function buildSitopSupervisorOutput() {
   text += `*Data:* ${formatDateBR(value('sup_data')) || '-'}\n`;
   text += `*Turno:* ${value('sup_turno') || '-'}\n`;
   text += `*Supervisor:* ${value('sup_supervisor') || '-'}\n`;
-  text += `*Turmas embarcadas:* ${value('sup_turmas') || '-'}\n\n`;
+  text += `*Turmas embarcadas:* ${formatListPT(getCheckedValues('sup_turmas')) || '-'}\n\n`;
 
   text += `*1. Atividades realizadas nas últimas 12h:*\n${value('sup_atividades_realizadas') || '-'}\n\n`;
   text += `*2. Atividades das próximas 12h:*\n${value('sup_atividades_proximas') || '-'}\n\n`;
@@ -442,7 +450,8 @@ function buildSitopSupervisorOutput() {
   text += `*4. ESCP e Simulados:*\n`;
   text += `- *Estado dos equipamentos:* ${value('sup_escp_estado') || '-'}\n`;
   text += `- *Pendências:* ${value('sup_escp_pendencias') || '-'}\n`;
-  text += `- *Data do último teste / próximo teste:* ${value('sup_escp_testes') || '-'}\n`;
+  text += `- *Data do último teste:* ${formatDateBR(value('sup_escp_ultimo_teste')) || '-'}\n`;
+  text += `- *Data do próximo teste:* ${formatDateBR(value('sup_escp_proximo_teste')) || '-'}\n`;
   text += `- *Simulado de controle de poço:* ${value('sup_simulado_poco') || '-'}\n`;
   text += `- *Simulado com UCI:* ${value('sup_simulado_uci') || '-'}\n\n`;
 
