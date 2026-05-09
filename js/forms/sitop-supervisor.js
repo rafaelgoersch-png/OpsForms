@@ -70,13 +70,6 @@
     attachAutoHandlers(item);
   }
 
-  function collectProntos() {
-    return [...document.querySelectorAll('.supervisor-pronto-item')].map(item => ({
-      nome: item.querySelector('.sup_pronto_nome').value.trim(),
-      mitigacao: item.querySelector('.sup_pronto_mitigacao').value.trim()
-    })).filter(item => item.nome || item.mitigacao);
-  }
-
   function addIncident(data = {}) {
     const container = byId('sup_incident_list');
     if (!container) return;
@@ -104,6 +97,13 @@
     container.appendChild(item);
 
     attachAutoHandlers(item);
+  }
+
+  function collectProntos() {
+    return [...document.querySelectorAll('.supervisor-pronto-item')].map(item => ({
+      nome: item.querySelector('.sup_pronto_nome').value.trim(),
+      mitigacao: item.querySelector('.sup_pronto_mitigacao').value.trim()
+    })).filter(item => item.nome || item.mitigacao);
   }
 
   function collectIncidents() {

@@ -442,8 +442,3 @@ Configuração recomendada:
 - simplifica a seção **ESCP** do **SITOP - Supervisor**;
 - remove campos de simulado de controle de poço, simulado com UCI e data do próximo teste;
 - mantém apenas estado dos equipamentos, pendências e data do último teste de ESCP.
-
-
-## Ajuste operacional - SITOP Supervisor
-
-A seção **Incidentes / Acidentes** do SITOP Supervisor usa o mesmo padrão controlado do SITOP Fiscal: botão **Adicionar incidente**, linhas dinâmicas com **Descrição breve + status** e **Data e hora**, e remoção individual de registros. O output é gerado a partir dessas linhas, evitando texto livre despadronizado nessa seção.

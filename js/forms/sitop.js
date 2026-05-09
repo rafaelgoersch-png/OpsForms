@@ -122,7 +122,7 @@
       });
     }
 
-    text += `*Total NPT:* ${value('sitop_npt_total') || '-'}\n\n`;
+    text += `\n`;
 
     text += `*5. Incidentes / Acidentes:*\n`;
     if (!incidents.length) {
@@ -133,7 +133,7 @@
       });
     }
 
-    text += `*Total NPT associado:* ${value('sitop_inc_total_npt') || '-'}\n\n`;
+    text += `\n`;
     text += `*6. Observações Relevantes:*\n${value('sitop_observacoes') || '-'}`;
 
     return text.trim();
