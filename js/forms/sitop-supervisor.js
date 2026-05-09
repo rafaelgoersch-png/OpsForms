@@ -77,6 +77,42 @@
     })).filter(item => item.nome || item.mitigacao);
   }
 
+  function addIncident(data = {}) {
+    const container = byId('sup_incident_list');
+    if (!container) return;
+
+    const item = document.createElement('div');
+    item.className = 'dynamic-item supervisor-incident-item';
+
+    const row = document.createElement('div');
+    row.className = 'row incident';
+
+    const descWrap = createInputWrap('Descrição breve + status', 'input', 'sup_inc_desc', data.desc || '');
+    const dtWrap = createInputWrap('Data e hora', 'input', 'sup_inc_datahora', data.datahora || '');
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'danger';
+    removeBtn.textContent = 'Remover';
+    removeBtn.addEventListener('click', () => {
+      item.remove();
+      updateOutput();
+    });
+
+    row.append(descWrap, dtWrap, removeBtn);
+    item.appendChild(row);
+    container.appendChild(item);
+
+    attachAutoHandlers(item);
+  }
+
+  function collectIncidents() {
+    return [...document.querySelectorAll('.supervisor-incident-item')].map(item => ({
+      desc: item.querySelector('.sup_inc_desc').value.trim(),
+      datahora: item.querySelector('.sup_inc_datahora').value.trim()
+    })).filter(item => item.desc || item.datahora);
+  }
+
   function buildProntosTable(prontos) {
     if (!prontos.length) return '';
 
@@ -94,6 +130,7 @@
 
   function buildOutput() {
     const prontos = collectProntos();
+    const incidents = collectIncidents();
 
     let text = `*SITOP DW 12h - Supervisão*\n\n`;
 
@@ -113,14 +150,10 @@
     text += `- *Corretivas Operacionais (telas / camisas / etc):* ${value('sup_corretivas') || '-'}\n`;
     text += `- *Observações adicionais:* ${value('sup_equip_obs') || '-'}\n\n`;
 
-    text += `*4. ESCP e Simulados:*\n`;
+    text += `*4. ESCP:*\n`;
     text += `- *Estado dos equipamentos:* ${value('sup_escp_estado') || '-'}\n`;
     text += `- *Pendências:* ${value('sup_escp_pendencias') || '-'}\n`;
-    text += `- *Data do último teste:* ${formatDateBR(value('sup_escp_ultimo_teste')) || '-'}\n`;
-    text += `- *Data do próximo teste:* ${formatDateBR(value('sup_escp_proximo_teste')) || '-'}\n`;
-    text += `- *Simulado de controle de poço:* ${value('sup_simulado_poco') || '-'}\n`;
-    text += `- *Simulado com UCI:* ${value('sup_simulado_uci') || '-'}\n\n`;
-
+    text += `- *Data do último teste de ESCP:* ${formatDateBR(value('sup_escp_ultimo_teste')) || '-'}\n\n`;
     text += `*5. Pessoas / Comportamento:*\n`;
     text += `- *Desvios Identificados:* ${value('sup_desvios') || '-'}\n`;
     text += `- *Pontos de Atenção / Conflitos Identificados:* ${value('sup_pontos_atencao') || '-'}\n`;
@@ -135,7 +168,15 @@
     text += `- *Falta de Materiais / Recursos logísticos:* ${value('sup_falta_materiais') || '-'}\n`;
     text += `- *Limitações Operacionais:* ${value('sup_limitacoes') || '-'}\n\n`;
 
-    text += `*7. Incidentes / Acidentes:*\n${value('sup_incidentes') || '-'}\n\n`;
+    text += `*7. Incidentes / Acidentes:*\n`;
+    if (!incidents.length) {
+      text += `-\n`;
+    } else {
+      incidents.forEach(inc => {
+        text += `${inc.desc || '-'} - ${inc.datahora || '-'}\n`;
+      });
+    }
+    text += `\n`;
     text += `*8. Observações Relevantes:*\n${value('sup_observacoes') || '-'}`;
 
     return text.trim();
@@ -144,10 +185,13 @@
   function initialiseDefaults() {
     const data = byId('sup_data');
     if (data && !data.value.trim()) data.value = todayDateInput();
+    if (byId('sup_incident_list') && !byId('sup_incident_list').children.length) addIncident();
   }
 
   function clearBodyLists() {
     if (byId('sup_prontos_list')) byId('sup_prontos_list').innerHTML = '';
+    if (byId('sup_incident_list')) byId('sup_incident_list').innerHTML = '';
+    addIncident();
   }
 
   function attachTurmasHandlers() {
@@ -178,7 +222,9 @@
   window.OpsFormsModules.sitopSupervisor = {
     setCallbacks,
     addPronto,
+    addIncident,
     collectProntos,
+    collectIncidents,
     buildOutput,
     initialiseDefaults,
     clearBodyLists,

@@ -212,6 +212,11 @@
       updateOutput();
     });
 
+    byId('addSupervisorIncidentBtn').addEventListener('click', () => {
+      sitopSupervisor.addIncident();
+      updateOutput();
+    });
+
     byId('copyTopBtn').addEventListener('click', openWhatsApp);
     byId('copyBottomBtn').addEventListener('click', openWhatsApp);
     byId('clearHeaderBtn').addEventListener('click', () => clearCurrent('header'));

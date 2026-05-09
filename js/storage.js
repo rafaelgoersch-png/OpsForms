@@ -72,6 +72,7 @@
       npts: sitop.collectNpts(),
       incidents: sitop.collectIncidents(),
       supervisorProntos: sitopSupervisor.collectProntos(),
+      supervisorIncidents: sitopSupervisor.collectIncidents(),
       fields: {}
     };
 
@@ -122,10 +123,12 @@
     if (byId('sitop_npt_list')) byId('sitop_npt_list').innerHTML = '';
     if (byId('sitop_incident_list')) byId('sitop_incident_list').innerHTML = '';
     if (byId('sup_prontos_list')) byId('sup_prontos_list').innerHTML = '';
+    if (byId('sup_incident_list')) byId('sup_incident_list').innerHTML = '';
 
     (state.npts || []).forEach(sitop.addNpt);
     (state.incidents || []).forEach(sitop.addIncident);
     (state.supervisorProntos || []).forEach(sitopSupervisor.addPronto);
+    (state.supervisorIncidents || []).forEach(sitopSupervisor.addIncident);
     sitopSupervisor.syncTurmasField();
   }
 

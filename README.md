@@ -407,7 +407,7 @@ Configuração recomendada:
 - adiciona o formulário **SITOP - Supervisor**;
 - inclui campo **Poço** no cabeçalho;
 - padroniza **Turmas embarcadas** com checkboxes 1, 2, 3 e 4;
-- separa **Data do último teste** e **Data do próximo teste** em campos de data;
+- inclui **Data do último teste de ESCP** como campo de data;
 - inclui tabela dinâmica **PRONTOS**, exibida no texto somente quando preenchida.
 
 ### v7
@@ -435,3 +435,15 @@ Configuração recomendada:
 
 - adiciona o campo **Melhoria sugerida** no Caça-Desvio;
 - inclui **Melhoria sugerida** no texto de saída para WhatsApp/Teams logo após **Ação imediata tomada**.
+
+
+### v12
+
+- simplifica a seção **ESCP** do **SITOP - Supervisor**;
+- remove campos de simulado de controle de poço, simulado com UCI e data do próximo teste;
+- mantém apenas estado dos equipamentos, pendências e data do último teste de ESCP.
+
+
+## Ajuste operacional - SITOP Supervisor
+
+A seção **Incidentes / Acidentes** do SITOP Supervisor usa o mesmo padrão controlado do SITOP Fiscal: botão **Adicionar incidente**, linhas dinâmicas com **Descrição breve + status** e **Data e hora**, e remoção individual de registros. O output é gerado a partir dessas linhas, evitando texto livre despadronizado nessa seção.

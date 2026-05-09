@@ -246,38 +246,21 @@
           </section>
 
           <section class="card">
-            <h2>4. ESCP e Simulados</h2>
+            <h2>4. ESCP</h2>
 
             <label>
               <span>Estado dos equipamentos</span>
-              <textarea id="sup_escp_estado" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Informar se os equipamentos estão operacionais ou relatar falhas pendentes"></textarea>
+              <textarea id="sup_escp_estado" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Informar se os equipamentos de ESCP estão operacionais ou relatar falhas pendentes"></textarea>
             </label>
 
             <label>
               <span>Pendências</span>
-              <textarea id="sup_escp_pendencias" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Listar pendências ESCP e simulados"></textarea>
-            </label>
-
-            <div class="grid two">
-              <label>
-                <span>Data do último teste</span>
-                <input type="date" id="sup_escp_ultimo_teste" data-form="sitopSupervisor" data-group="body" />
-              </label>
-
-              <label>
-                <span>Data do próximo teste</span>
-                <input type="date" id="sup_escp_proximo_teste" data-form="sitopSupervisor" data-group="body" />
-              </label>
-            </div>
-
-            <label>
-              <span>Simulado de controle de poço</span>
-              <textarea id="sup_simulado_poco" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Informar quais turmas participaram"></textarea>
+              <textarea id="sup_escp_pendencias" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Listar pendências de ESCP"></textarea>
             </label>
 
             <label>
-              <span>Simulado com UCI</span>
-              <textarea id="sup_simulado_uci" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Informar quais turmas participaram"></textarea>
+              <span>Data do último teste de ESCP</span>
+              <input type="date" id="sup_escp_ultimo_teste" data-form="sitopSupervisor" data-group="body" />
             </label>
           </section>
 
@@ -316,12 +299,12 @@
           </section>
 
           <section class="card">
-            <h2>7. Incidentes / Acidentes</h2>
+            <div class="card-title-row">
+              <h2>7. Incidentes / Acidentes</h2>
+              <button type="button" id="addSupervisorIncidentBtn">Adicionar incidente</button>
+            </div>
 
-            <label>
-              <span>Descrição breve + status + data/hora + reporte</span>
-              <textarea id="sup_incidentes" data-form="sitopSupervisor" data-group="body" rows="4" placeholder="Informar descrição breve, status, data/hora e hora do reporte ao CCOS / Gestão DW"></textarea>
-            </label>
+            <div id="sup_incident_list" class="dynamic-list"></div>
           </section>
 
           <section class="card">
