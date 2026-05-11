@@ -1,5 +1,5 @@
 (function () {
-  const { byId, value, formatDateBR, formatDateTimeBR, todayDateInput, formatListPT } = window.OpsUtils;
+  const { byId, value, formatDateBR, formatDateTimeBR, normalizeDateTimeInput, todayDateInput, formatListPT } = window.OpsUtils;
   let attachAutoHandlers = () => {};
   let updateOutput = () => {};
 
@@ -26,13 +26,13 @@
     return syncTurmasField() || '-';
   }
 
-  function createInputWrap(labelText, type, className, val, inputType = null) {
+  function createInputWrap(labelText, tagName, className, val, inputType = 'text') {
     const label = document.createElement('label');
     const span = document.createElement('span');
-    const input = document.createElement(type);
+    const input = document.createElement(tagName);
 
     span.textContent = labelText;
-    if (inputType) input.type = inputType;
+    if (tagName === 'input') input.type = inputType;
     input.className = className;
     input.value = val;
     input.dataset.form = 'sitopSupervisor';
@@ -82,8 +82,8 @@
     row.className = 'row incident';
 
     const descWrap = createInputWrap('Descrição breve + status', 'input', 'sup_inc_desc', data.desc || '');
-    const dtWrap = createInputWrap('Data e hora', 'input', 'sup_inc_datahora', data.datahora || '');
-    const reportWrap = createInputWrap('Data e hora do reporte', 'input', 'sup_inc_report_datahora', data.reportDatahora || '', 'datetime-local');
+    const dtWrap = createInputWrap('Data e hora do evento', 'input', 'sup_inc_datahora', normalizeDateTimeInput(data.datahora || ''), 'datetime-local');
+    const reportWrap = createInputWrap('Data e hora do reporte', 'input', 'sup_inc_reporte_datahora', normalizeDateTimeInput(data.reporteDatahora || data.reportDatahora || ''), 'datetime-local');
 
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
@@ -112,8 +112,8 @@
     return [...document.querySelectorAll('.supervisor-incident-item')].map(item => ({
       desc: item.querySelector('.sup_inc_desc').value.trim(),
       datahora: item.querySelector('.sup_inc_datahora').value.trim(),
-      reportDatahora: item.querySelector('.sup_inc_report_datahora')?.value.trim() || ''
-    })).filter(item => item.desc || item.datahora || item.reportDatahora);
+      reporteDatahora: item.querySelector('.sup_inc_reporte_datahora')?.value.trim() || ''
+    })).filter(item => item.desc || item.datahora || item.reporteDatahora);
   }
 
   function buildProntosTable(prontos) {
@@ -176,7 +176,7 @@
       text += `-\n`;
     } else {
       incidents.forEach(inc => {
-        text += `${inc.desc || '-'} - ${inc.datahora || '-'} - Reportado em: ${formatDateTimeBR(inc.reportDatahora) || '-'}\n`;
+        text += `${inc.desc || '-'} - ${formatDateTimeBR(inc.datahora) || '-'} - Reportado em: ${formatDateTimeBR(inc.reporteDatahora) || '-'}\n`;
       });
     }
     text += `\n`;

@@ -38,10 +38,33 @@
     return `${day}/${month}/${year}`;
   }
 
+  function normalizeDateTimeInput(value) {
+    if (!value) return '';
+
+    const trimmed = String(value).trim();
+
+    // Already compatible with <input type="datetime-local">.
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(trimmed)) return trimmed;
+
+    // Accept "YYYY-MM-DD HH:MM" and convert to datetime-local.
+    const isoLike = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}:\d{2})/);
+    if (isoLike) return `${isoLike[1]}-${isoLike[2]}-${isoLike[3]}T${isoLike[4]}`;
+
+    // Accept legacy Brazilian format "DD/MM/YYYY HH:MM".
+    const brLike = trimmed.match(/^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}:\d{2})/);
+    if (brLike) return `${brLike[3]}-${brLike[2]}-${brLike[1]}T${brLike[4]}`;
+
+    return trimmed;
+  }
+
   function formatDateTimeBR(value) {
     if (!value) return '';
-    const [date, time] = value.split('T');
-    return `${formatDateBR(date)} ${time || ''}`.trim();
+
+    const normalized = normalizeDateTimeInput(value);
+    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(normalized)) return value;
+
+    const [date, time] = normalized.split('T');
+    return `${formatDateBR(date)} ${time.slice(0, 5)}`.trim();
   }
 
   function getRadioValue(name) {
@@ -121,6 +144,7 @@
     nowTimeInput,
     nowDateTimeInput,
     formatDateBR,
+    normalizeDateTimeInput,
     formatDateTimeBR,
     getRadioValue,
     getCheckedValues,
