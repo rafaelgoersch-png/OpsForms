@@ -151,7 +151,7 @@
     text += `- *Preventivas Previstas e Executadas:* ${value('sup_previstas_executadas') || '-'}\n`;
     text += `- *Falhas Detectadas e Status das correções:* ${value('sup_falhas_status') || '-'}\n`;
     text += `- *Corretivas Operacionais (telas / camisas / etc):* ${value('sup_corretivas') || '-'}\n`;
-    text += `- *Observações adicionais:* ${value('sup_equip_obs') || '-'}\n\n`;
+    text += `\n`;
 
     text += `*4. ESCP:*\n`;
     text += `- *Pendências:* ${value('sup_escp_pendencias') || '-'}\n`;
