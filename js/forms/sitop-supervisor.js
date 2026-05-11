@@ -154,7 +154,6 @@
     text += `- *Observações adicionais:* ${value('sup_equip_obs') || '-'}\n\n`;
 
     text += `*4. ESCP:*\n`;
-    text += `- *Estado dos equipamentos:* ${value('sup_escp_estado') || '-'}\n`;
     text += `- *Pendências:* ${value('sup_escp_pendencias') || '-'}\n`;
     text += `- *Data do último teste de ESCP:* ${formatDateBR(value('sup_escp_ultimo_teste')) || '-'}\n\n`;
     text += `*5. Pessoas / Comportamento:*\n`;
@@ -168,8 +167,7 @@
     text += `\n`;
 
     text += `*6. Suporte Operacional:*\n`;
-    text += `- *Falta de Materiais / Recursos logísticos:* ${value('sup_falta_materiais') || '-'}\n`;
-    text += `- *Limitações Operacionais:* ${value('sup_limitacoes') || '-'}\n\n`;
+    text += `- *Falta de Materiais / Recursos logísticos:* ${value('sup_falta_materiais') || '-'}\n\n`;
 
     text += `*7. Incidentes / Acidentes:*\n`;
     if (!incidents.length) {

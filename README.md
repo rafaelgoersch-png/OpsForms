@@ -441,4 +441,10 @@ Configuração recomendada:
 
 - simplifica a seção **ESCP** do **SITOP - Supervisor**;
 - remove campos de simulado de controle de poço, simulado com UCI e data do próximo teste;
-- mantém apenas estado dos equipamentos, pendências e data do último teste de ESCP.
+- mantém apenas pendências e data do último teste de ESCP.
+
+
+### v19
+
+- remove o campo **Estado dos equipamentos** da seção **ESCP** do **SITOP - Supervisor**;
+- mantém **Pendências** e **Data do último teste de ESCP** como os únicos campos da seção.
