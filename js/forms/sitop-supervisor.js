@@ -132,7 +132,6 @@
   }
 
   function buildOutput() {
-    const prontos = collectProntos();
     const incidents = collectIncidents();
 
     let text = `*SITOP DW 12h - Supervisão*\n\n`;
@@ -156,15 +155,10 @@
     text += `*4. ESCP:*\n`;
     text += `- *Pendências:* ${value('sup_escp_pendencias') || '-'}\n`;
     text += `- *Data do último teste de ESCP:* ${formatDateBR(value('sup_escp_ultimo_teste')) || '-'}\n\n`;
-    text += `*5. Pessoas / Comportamento:*\n`;
-    text += `- *Desvios Identificados:* ${value('sup_desvios') || '-'}\n`;
-    text += `- *Pontos de Atenção / Conflitos Identificados:* ${value('sup_pontos_atencao') || '-'}\n`;
+    text += `*5. Pessoas / Comportamento:*
+${value('sup_pessoas_comportamento') || '-'}
 
-    const prontosTable = buildProntosTable(prontos);
-    if (prontosTable) {
-      text += `- *PRONTOS - Colaboradores Alterados e Ações Preventivas:*\n${prontosTable}\n`;
-    }
-    text += `\n`;
+`;
 
     text += `*6. Suporte Operacional:*\n`;
     text += `- *Falta de Materiais / Recursos logísticos:* ${value('sup_falta_materiais') || '-'}\n\n`;

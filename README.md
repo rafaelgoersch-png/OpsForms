@@ -448,3 +448,14 @@ Configuração recomendada:
 
 - remove o campo **Estado dos equipamentos** da seção **ESCP** do **SITOP - Supervisor**;
 - mantém **Pendências** e **Data do último teste de ESCP** como os únicos campos da seção.
+
+
+## Ajuste recente - SITOP Supervisor
+
+No item **5. Pessoas / Comportamento**, o SITOP Supervisor foi reduzido para um único campo:
+
+- **Pessoas / Comportamento**
+
+Texto guia:
+
+> Informar desvios comportamentais relevantes, conflitos ou pontos de atenção com a equipe.
