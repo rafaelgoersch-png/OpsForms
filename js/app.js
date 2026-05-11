@@ -207,13 +207,10 @@
       updateOutput();
     });
 
-    const addSupervisorProntoBtn = byId('addSupervisorProntoBtn');
-    if (addSupervisorProntoBtn) {
-      addSupervisorProntoBtn.addEventListener('click', () => {
-        sitopSupervisor.addPronto();
-        updateOutput();
-      });
-    }
+    byId('addSupervisorProntoBtn').addEventListener('click', () => {
+      sitopSupervisor.addPronto();
+      updateOutput();
+    });
 
     byId('addSupervisorIncidentBtn').addEventListener('click', () => {
       sitopSupervisor.addIncident();

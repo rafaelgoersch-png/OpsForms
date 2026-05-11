@@ -408,7 +408,7 @@ Configuração recomendada:
 - inclui campo **Poço** no cabeçalho;
 - padroniza **Turmas embarcadas** com checkboxes 1, 2, 3 e 4;
 - inclui **Data do último teste de ESCP** como campo de data;
-- inclui tabela dinâmica **PRONTOS**, exibida no texto somente quando preenchida.
+- mantém um campo único de **Pessoas / Comportamento** e inclui tabela dinâmica **PRONTOS**, exibida no texto somente quando preenchida.
 
 ### v7
 
@@ -448,14 +448,3 @@ Configuração recomendada:
 
 - remove o campo **Estado dos equipamentos** da seção **ESCP** do **SITOP - Supervisor**;
 - mantém **Pendências** e **Data do último teste de ESCP** como os únicos campos da seção.
-
-
-## Ajuste recente - SITOP Supervisor
-
-No item **5. Pessoas / Comportamento**, o SITOP Supervisor foi reduzido para um único campo:
-
-- **Pessoas / Comportamento**
-
-Texto guia:
-
-> Informar desvios comportamentais relevantes, conflitos ou pontos de atenção com a equipe.
