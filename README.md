@@ -442,3 +442,10 @@ Configuração recomendada:
 - simplifica a seção **ESCP** do **SITOP - Supervisor**;
 - remove campos de simulado de controle de poço, simulado com UCI e data do próximo teste;
 - mantém apenas estado dos equipamentos, pendências e data do último teste de ESCP.
+
+### v16
+
+- adiciona o campo **Data e hora do reporte** em **Incidentes / Acidentes** no SITOP - Fiscalização;
+- adiciona o campo **Data e hora do reporte** em **Incidentes / Acidentes** no SITOP - Supervisor;
+- mantém os campos de incidentes/acidentes na mesma linha do formulário;
+- inclui o horário de reporte no texto final para WhatsApp/Teams.

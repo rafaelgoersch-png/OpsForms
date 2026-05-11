@@ -1,5 +1,5 @@
 (function () {
-  const { byId, value, formatDateBR, todayDateInput } = window.OpsUtils;
+  const { byId, value, formatDateBR, formatDateTimeBR, todayDateInput } = window.OpsUtils;
   let attachAutoHandlers = () => {};
   let updateOutput = () => {};
 
@@ -8,12 +8,13 @@
     updateOutput = callbacks.updateOutput || updateOutput;
   }
 
-  function createInputWrap(labelText, type, className, val) {
+  function createInputWrap(labelText, type, className, val, inputType = null) {
     const label = document.createElement('label');
     const span = document.createElement('span');
     const input = document.createElement(type);
 
     span.textContent = labelText;
+    if (inputType) input.type = inputType;
     input.className = className;
     input.value = val;
     input.dataset.form = 'sitop';
@@ -65,6 +66,7 @@
 
     const descWrap = createInputWrap('Descrição breve + status', 'input', 'inc_desc', data.desc || '');
     const dtWrap = createInputWrap('Data e hora', 'input', 'inc_datahora', data.datahora || '');
+    const reportWrap = createInputWrap('Data e hora do reporte', 'input', 'inc_report_datahora', data.reportDatahora || '', 'datetime-local');
 
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
@@ -75,7 +77,7 @@
       updateOutput();
     });
 
-    row.append(descWrap, dtWrap, removeBtn);
+    row.append(descWrap, dtWrap, reportWrap, removeBtn);
     item.appendChild(row);
     container.appendChild(item);
 
@@ -93,8 +95,9 @@
   function collectIncidents() {
     return [...document.querySelectorAll('.incident-item')].map(item => ({
       desc: item.querySelector('.inc_desc').value.trim(),
-      datahora: item.querySelector('.inc_datahora').value.trim()
-    })).filter(item => item.desc || item.datahora);
+      datahora: item.querySelector('.inc_datahora').value.trim(),
+      reportDatahora: item.querySelector('.inc_report_datahora')?.value.trim() || ''
+    })).filter(item => item.desc || item.datahora || item.reportDatahora);
   }
 
   function buildOutput() {
@@ -129,7 +132,7 @@
       text += `-\n`;
     } else {
       incidents.forEach(inc => {
-        text += `${inc.desc || '-'} - ${inc.datahora || '-'}\n`;
+        text += `${inc.desc || '-'} - ${inc.datahora || '-'} - Reportado em: ${formatDateTimeBR(inc.reportDatahora) || '-'}\n`;
       });
     }
 
