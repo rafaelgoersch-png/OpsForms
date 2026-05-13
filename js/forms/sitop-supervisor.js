@@ -337,8 +337,6 @@ ${value('sup_atividades_proximas') || '-'}
     const data = byId('sup_data');
     if (data && !data.value.trim()) data.value = todayDateInput();
     if (byId('sup_atividade_principal_list') && !byId('sup_atividade_principal_list').children.length) addAtividadePrincipal();
-    if (byId('sup_movimentacao_carga_list') && !byId('sup_movimentacao_carga_list').children.length) addMovimentacaoCarga();
-    if (byId('sup_atividade_paralela_list') && !byId('sup_atividade_paralela_list').children.length) addAtividadeParalela();
     if (byId('sup_incident_list') && !byId('sup_incident_list').children.length) addIncident();
   }
 
@@ -349,8 +347,6 @@ ${value('sup_atividades_proximas') || '-'}
     if (byId('sup_prontos_list')) byId('sup_prontos_list').innerHTML = '';
     if (byId('sup_incident_list')) byId('sup_incident_list').innerHTML = '';
     addAtividadePrincipal();
-    addMovimentacaoCarga();
-    addAtividadeParalela();
     addIncident();
   }
 
