@@ -42,6 +42,84 @@
     return label;
   }
 
+  function createTextareaWrap(labelText, className, val, placeholder = '') {
+    const label = document.createElement('label');
+    const span = document.createElement('span');
+    const textarea = document.createElement('textarea');
+
+    span.textContent = labelText;
+    textarea.className = className;
+    textarea.value = val || '';
+    textarea.rows = 2;
+    textarea.placeholder = placeholder;
+    textarea.dataset.form = 'sitopSupervisor';
+    textarea.dataset.group = 'body';
+
+    label.append(span, textarea);
+    return label;
+  }
+
+  function addActivityItem(containerId, itemClass, inputClass, labelText, placeholder, data = {}) {
+    const container = byId(containerId);
+    if (!container) return;
+
+    const item = document.createElement('div');
+    item.className = `dynamic-item ${itemClass}`;
+
+    const row = document.createElement('div');
+    row.className = 'row activity-item-row';
+
+    const textWrap = createTextareaWrap(labelText, inputClass, data.text || data.value || '', placeholder);
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'danger';
+    removeBtn.textContent = 'Remover';
+    removeBtn.addEventListener('click', () => {
+      item.remove();
+      updateOutput();
+    });
+
+    row.append(textWrap, removeBtn);
+    item.appendChild(row);
+    container.appendChild(item);
+
+    attachAutoHandlers(item);
+  }
+
+  function addAtividadePrincipal(data = {}) {
+    addActivityItem(
+      'sup_atividade_principal_list',
+      'supervisor-atividade-principal-item',
+      'sup_atividade_principal_text',
+      'Item realizado',
+      'Ex.: Movimentada broca para a área de preparação; acompanhado teste de bomba; liberada frente operacional.',
+      data
+    );
+  }
+
+  function addMovimentacaoCarga(data = {}) {
+    addActivityItem(
+      'sup_movimentacao_carga_list',
+      'supervisor-movimentacao-carga-item',
+      'sup_movimentacao_carga_text',
+      'Item realizado',
+      'Ex.: Movimentada broca; recebida carga crítica; apoio de guindaste; movimentação no catwalk.',
+      data
+    );
+  }
+
+  function addAtividadeParalela(data = {}) {
+    addActivityItem(
+      'sup_atividade_paralela_list',
+      'supervisor-atividade-paralela-item',
+      'sup_atividade_paralela_text',
+      'Item realizado',
+      'Ex.: Inspeção, organização de área, preparação de material, apoio de terceiros ou trabalho simultâneo.',
+      data
+    );
+  }
+
   function addPronto(data = {}) {
     const container = byId('sup_prontos_list');
     if (!container) return;
@@ -101,6 +179,25 @@
     attachAutoHandlers(item);
   }
 
+  function collectActivityList(itemSelector, inputSelector) {
+    return [...document.querySelectorAll(itemSelector)]
+      .map(item => item.querySelector(inputSelector)?.value.trim() || '')
+      .filter(Boolean)
+      .map(text => ({ text }));
+  }
+
+  function collectAtividadesPrincipais() {
+    return collectActivityList('.supervisor-atividade-principal-item', '.sup_atividade_principal_text');
+  }
+
+  function collectMovimentacoesCarga() {
+    return collectActivityList('.supervisor-movimentacao-carga-item', '.sup_movimentacao_carga_text');
+  }
+
+  function collectAtividadesParalelas() {
+    return collectActivityList('.supervisor-atividade-paralela-item', '.sup_atividade_paralela_text');
+  }
+
   function collectProntos() {
     return [...document.querySelectorAll('.supervisor-pronto-item')].map(item => ({
       nome: item.querySelector('.sup_pronto_nome').value.trim(),
@@ -144,26 +241,80 @@
     text += `*Supervisor:* ${value('sup_supervisor') || '-'}\n`;
     text += `*Turmas embarcadas:* ${getTurmasText()}\n\n`;
 
-    text += `*1. Atividades realizadas nas últimas 12h:*\n${value('sup_atividades_realizadas') || '-'}\n\n`;
-    text += `*2. Atividades das próximas 12h:*\n${value('sup_atividades_proximas') || '-'}\n\n`;
+    text += `*2. Atividades:*
+`;
 
-    text += `*3. Equipamentos / Integridade:*\n`;
-    text += `- *Preventivas Previstas e Executadas:* ${value('sup_previstas_executadas') || '-'}\n`;
-    text += `- *Falhas Detectadas e Status das correções:* ${value('sup_falhas_status') || '-'}\n`;
-    text += `- *Corretivas Operacionais (telas / camisas / etc):* ${value('sup_corretivas') || '-'}\n`;
-    text += `\n`;
+    const atividadesPrincipais = collectAtividadesPrincipais();
+    const movimentacoesCarga = collectMovimentacoesCarga();
+    const atividadesParalelas = collectAtividadesParalelas();
+    const pessoasComportamento = value('sup_pessoas_comportamento');
 
-    text += `*4. ESCP:*\n`;
-    text += `- *Pendências:* ${value('sup_escp_pendencias') || '-'}\n`;
-    text += `- *Data do último teste de ESCP:* ${formatDateBR(value('sup_escp_ultimo_teste')) || '-'}\n\n`;
-    text += `*5. Pessoas / Comportamento:*\n`;
-    text += `${value('sup_pessoas_comportamento') || '-'}\n`;
+    if (atividadesPrincipais.length || movimentacoesCarga.length || atividadesParalelas.length || pessoasComportamento) {
+      text += `
+*2.1 Atividades realizadas nas últimas 12h:*
+`;
 
+      if (atividadesPrincipais.length) {
+        text += `*Atividade Principal:*
+`;
+        atividadesPrincipais.forEach(item => {
+          text += `- ${item.text}
+`;
+        });
+      }
+
+      if (movimentacoesCarga.length) {
+        text += `*Movimentação de Carga:*
+`;
+        movimentacoesCarga.forEach(item => {
+          text += `- ${item.text}
+`;
+        });
+      }
+
+      if (atividadesParalelas.length) {
+        text += `*Atividades Paralelas:*
+`;
+        atividadesParalelas.forEach(item => {
+          text += `- ${item.text}
+`;
+        });
+      }
+
+      if (pessoasComportamento) {
+        text += `*Pessoas / Comportamento:*
+${pessoasComportamento}
+`;
+      }
+
+      text += `
+`;
+    }
+
+    text += `*2.2 Atividades das próximas 12h:*
+${value('sup_atividades_proximas') || '-'}
+
+`;
+
+    text += `*3. Equipamentos / Integridade:*
+`;
+    text += `- *Preventivas Previstas e Executadas:* ${value('sup_previstas_executadas') || '-'}
+`;
+    text += `- *Falhas Detectadas e Status das correções:* ${value('sup_falhas_status') || '-'}
+`;
+    text += `- *Corretivas Operacionais (telas / camisas / etc):* ${value('sup_corretivas') || '-'}
+`;
+    text += `
+`;
+
+    text += `*4. PRONTOS:*
+`;
     const prontosTable = buildProntosTable(prontos);
     if (prontosTable) {
-      text += `- *PRONTOS - Colaboradores Alterados e Ações Preventivas:*\n${prontosTable}\n`;
+      text += `*PRONTOS - Colaboradores Alterados e Ações Preventivas:*\n${prontosTable}\n\n`;
+    } else {
+      text += `PRONTOS sem anomalia\n\n`;
     }
-    text += `\n`;
 
     text += `*6. Suporte Operacional:*\n`;
     text += `- *Falta de Materiais / Recursos logísticos:* ${value('sup_falta_materiais') || '-'}\n\n`;
@@ -185,12 +336,21 @@
   function initialiseDefaults() {
     const data = byId('sup_data');
     if (data && !data.value.trim()) data.value = todayDateInput();
+    if (byId('sup_atividade_principal_list') && !byId('sup_atividade_principal_list').children.length) addAtividadePrincipal();
+    if (byId('sup_movimentacao_carga_list') && !byId('sup_movimentacao_carga_list').children.length) addMovimentacaoCarga();
+    if (byId('sup_atividade_paralela_list') && !byId('sup_atividade_paralela_list').children.length) addAtividadeParalela();
     if (byId('sup_incident_list') && !byId('sup_incident_list').children.length) addIncident();
   }
 
   function clearBodyLists() {
+    if (byId('sup_atividade_principal_list')) byId('sup_atividade_principal_list').innerHTML = '';
+    if (byId('sup_movimentacao_carga_list')) byId('sup_movimentacao_carga_list').innerHTML = '';
+    if (byId('sup_atividade_paralela_list')) byId('sup_atividade_paralela_list').innerHTML = '';
     if (byId('sup_prontos_list')) byId('sup_prontos_list').innerHTML = '';
     if (byId('sup_incident_list')) byId('sup_incident_list').innerHTML = '';
+    addAtividadePrincipal();
+    addMovimentacaoCarga();
+    addAtividadeParalela();
     addIncident();
   }
 
@@ -221,8 +381,14 @@
   window.OpsFormsModules = window.OpsFormsModules || {};
   window.OpsFormsModules.sitopSupervisor = {
     setCallbacks,
+    addAtividadePrincipal,
+    addMovimentacaoCarga,
+    addAtividadeParalela,
     addPronto,
     addIncident,
+    collectAtividadesPrincipais,
+    collectMovimentacoesCarga,
+    collectAtividadesParalelas,
     collectProntos,
     collectIncidents,
     buildOutput,

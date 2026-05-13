@@ -71,6 +71,9 @@
       activeFormType,
       npts: sitop.collectNpts(),
       incidents: sitop.collectIncidents(),
+      supervisorAtividadesPrincipais: sitopSupervisor.collectAtividadesPrincipais(),
+      supervisorMovimentacoesCarga: sitopSupervisor.collectMovimentacoesCarga(),
+      supervisorAtividadesParalelas: sitopSupervisor.collectAtividadesParalelas(),
       supervisorProntos: sitopSupervisor.collectProntos(),
       supervisorIncidents: sitopSupervisor.collectIncidents(),
       fields: {}
@@ -122,11 +125,17 @@
 
     if (byId('sitop_npt_list')) byId('sitop_npt_list').innerHTML = '';
     if (byId('sitop_incident_list')) byId('sitop_incident_list').innerHTML = '';
+    if (byId('sup_atividade_principal_list')) byId('sup_atividade_principal_list').innerHTML = '';
+    if (byId('sup_movimentacao_carga_list')) byId('sup_movimentacao_carga_list').innerHTML = '';
+    if (byId('sup_atividade_paralela_list')) byId('sup_atividade_paralela_list').innerHTML = '';
     if (byId('sup_prontos_list')) byId('sup_prontos_list').innerHTML = '';
     if (byId('sup_incident_list')) byId('sup_incident_list').innerHTML = '';
 
     (state.npts || []).forEach(sitop.addNpt);
     (state.incidents || []).forEach(sitop.addIncident);
+    (state.supervisorAtividadesPrincipais || []).forEach(sitopSupervisor.addAtividadePrincipal);
+    (state.supervisorMovimentacoesCarga || []).forEach(sitopSupervisor.addMovimentacaoCarga);
+    (state.supervisorAtividadesParalelas || []).forEach(sitopSupervisor.addAtividadeParalela);
     (state.supervisorProntos || []).forEach(sitopSupervisor.addPronto);
     (state.supervisorIncidents || []).forEach(sitopSupervisor.addIncident);
     sitopSupervisor.syncTurmasField();

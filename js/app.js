@@ -207,6 +207,21 @@
       updateOutput();
     });
 
+    byId('addSupervisorAtividadePrincipalBtn').addEventListener('click', () => {
+      sitopSupervisor.addAtividadePrincipal();
+      updateOutput();
+    });
+
+    byId('addSupervisorMovimentacaoCargaBtn').addEventListener('click', () => {
+      sitopSupervisor.addMovimentacaoCarga();
+      updateOutput();
+    });
+
+    byId('addSupervisorAtividadeParalelaBtn').addEventListener('click', () => {
+      sitopSupervisor.addAtividadeParalela();
+      updateOutput();
+    });
+
     byId('addSupervisorProntoBtn').addEventListener('click', () => {
       sitopSupervisor.addPronto();
       updateOutput();

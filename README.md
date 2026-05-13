@@ -138,7 +138,7 @@ Cada arquivo dentro desta pasta concentra a lógica específica de um relatório
 | Arquivo | Relatório | Responsabilidade |
 |---|---|---|
 | `sitop.js` | SITOP - Fiscalização | Geração do texto do SITOP Fiscal e regras específicas do formulário |
-| `sitop-supervisor.js` | SITOP - Supervisor | Geração do texto, turmas embarcadas, datas de teste e tabela PRONTOS |
+| `sitop-supervisor.js` | SITOP - Supervisor | Geração do texto, turmas embarcadas, atividades condicionais, datas de teste, PRONTOS e incidentes |
 | `desvio.js` | Caça-Desvio | Geração do texto do reporte de desvio |
 | `evento.js` | Captura de Evento / Lições Aprendidas | Geração do texto de eventos, criticidade e campos condicionais |
 
@@ -448,3 +448,23 @@ Configuração recomendada:
 
 - remove o campo **Estado dos equipamentos** da seção **ESCP** do **SITOP - Supervisor**;
 - mantém **Pendências** e **Data do último teste de ESCP** como os únicos campos da seção.
+
+
+### v24
+
+- ajusta o **SITOP - Supervisor**;
+- mantém **Pessoas / Comportamento** como subitem de **2. Atividades**;
+- divide as atividades realizadas em campos condicionais: **Atividades**, **Movimentação de Cargas** e **Atividades Paralelas**;
+- mantém **Atividades das próximas 12h** sem alteração;
+- transforma **PRONTOS** em item próprio;
+- quando não houver colaborador alterado em PRONTOS, o output exibe **PRONTOS sem anomalia**.
+
+### v27
+
+- ajusta o **SITOP - Supervisor**;
+- remove a seção **4. ESCP**;
+- transforma **Atividade Principal**, **Movimentação de Carga** e **Atividades Paralelas** em listas controladas com botão de adicionar item;
+- no output, cada sub-subitem aparece como título e seus registros aparecem abaixo em lista;
+- mantém **Pessoas / Comportamento** como campo aberto, porém como último sub-subitem de **Atividades realizadas nas últimas 12h**;
+- **Pessoas / Comportamento** só aparece no output quando preenchido;
+- renumera os itens seguintes do SITOP Supervisor após a remoção da ESCP.

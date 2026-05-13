@@ -641,3 +641,19 @@ body[data-theme="light"] button.primary {
   border-color: #1f6feb;
   color: #ffffff;
 }
+
+/* Ajustes de listas controladas do SITOP Supervisor */
+.card-title-row.compact-row {
+  margin-top: 14px;
+  margin-bottom: 8px;
+}
+
+.card-title-row.compact-row h3 {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.dynamic-item .row.activity-item-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
