@@ -249,47 +249,51 @@
     const atividadesParalelas = collectAtividadesParalelas();
     const pessoasComportamento = value('sup_pessoas_comportamento');
 
-    if (atividadesPrincipais.length || movimentacoesCarga.length || atividadesParalelas.length || pessoasComportamento) {
-      text += `
+    text += `
 *2.1 Atividades realizadas nas últimas 12h:*
 `;
 
-      if (atividadesPrincipais.length) {
-        text += `*Atividade Principal:*
+    text += `*Atividade Principal:*
 `;
-        atividadesPrincipais.forEach(item => {
-          text += `- ${item.text}
+    if (atividadesPrincipais.length) {
+      atividadesPrincipais.forEach(item => {
+        text += `- ${item.text}
 `;
-        });
-      }
-
-      if (movimentacoesCarga.length) {
-        text += `*Movimentação de Carga:*
-`;
-        movimentacoesCarga.forEach(item => {
-          text += `- ${item.text}
-`;
-        });
-      }
-
-      if (atividadesParalelas.length) {
-        text += `*Atividades Paralelas:*
-`;
-        atividadesParalelas.forEach(item => {
-          text += `- ${item.text}
-`;
-        });
-      }
-
-      if (pessoasComportamento) {
-        text += `*Pessoas / Comportamento:*
-${pessoasComportamento}
-`;
-      }
-
-      text += `
+      });
+    } else {
+      text += `-
 `;
     }
+
+    if (movimentacoesCarga.length) {
+      text += `
+*Movimentação de Carga:*
+`;
+      movimentacoesCarga.forEach(item => {
+        text += `- ${item.text}
+`;
+      });
+    }
+
+    if (atividadesParalelas.length) {
+      text += `
+*Atividades Paralelas:*
+`;
+      atividadesParalelas.forEach(item => {
+        text += `- ${item.text}
+`;
+      });
+    }
+
+    if (pessoasComportamento) {
+      text += `
+*Pessoas / Comportamento:*
+${pessoasComportamento}
+`;
+    }
+
+    text += `
+`;
 
     text += `*2.2 Atividades das próximas 12h:*
 ${value('sup_atividades_proximas') || '-'}
@@ -316,10 +320,10 @@ ${value('sup_atividades_proximas') || '-'}
       text += `PRONTOS sem anomalia\n\n`;
     }
 
-    text += `*6. Suporte Operacional:*\n`;
+    text += `*5. Suporte Operacional:*\n`;
     text += `- *Falta de Materiais / Recursos logísticos:* ${value('sup_falta_materiais') || '-'}\n\n`;
 
-    text += `*7. Incidentes / Acidentes:*\n`;
+    text += `*6. Incidentes / Acidentes:*\n`;
     if (!incidents.length) {
       text += `-\n`;
     } else {
@@ -328,7 +332,7 @@ ${value('sup_atividades_proximas') || '-'}
       });
     }
     text += `\n`;
-    text += `*8. Observações Relevantes:*\n${value('sup_observacoes') || '-'}`;
+    text += `*7. Observações Relevantes:*\n${value('sup_observacoes') || '-'}`;
 
     return text.trim();
   }
