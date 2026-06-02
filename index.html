@@ -356,6 +356,7 @@
             <div class="chips">
               <label><input type="checkbox" name="desvio_setor" value="Operações" data-form="desvio" data-group="body" /> <span>Operações</span></label>
               <label><input type="checkbox" name="desvio_setor" value="Integridade" data-form="desvio" data-group="body" /> <span>Integridade</span></label>
+              <label><input type="checkbox" name="desvio_setor" value="SMS" data-form="desvio" data-group="body" /> <span>SMS</span></label>
             </div>
           </section>
 
@@ -363,12 +364,18 @@
             <h2>3. Classificação</h2>
 
             <div class="section-label">Classificação do desvio</div>
-            <div class="chips">
-              <label><input type="radio" name="desvio_classificacao" value="Comportamental" data-form="desvio" data-group="body" /> <span>Comportamental</span></label>
-              <label><input type="radio" name="desvio_classificacao" value="Condição do ambiente/instalação" data-form="desvio" data-group="body" /> <span>Condição do ambiente/instalação</span></label>
-              <label><input type="radio" name="desvio_classificacao" value="Operacional" data-form="desvio" data-group="body" /> <span>Operacional</span></label>
-              <label><input type="radio" name="desvio_classificacao" value="Sugestão/melhoria" data-form="desvio" data-group="body" /> <span>Sugestão/melhoria</span></label>
+            <div class="checkbox-stack compact">
+              <label><input type="radio" name="desvio_classificacao" value="Comportamento Inseguro" data-form="desvio" data-group="body" /> <span>Comportamento Inseguro (Ex.: posicionamento, falta de uso de EPI, etc)</span></label>
+              <label><input type="radio" name="desvio_classificacao" value="Condições Inseguras" data-form="desvio" data-group="body" /> <span>Condições Inseguras (Ex.: instalações, equipamentos, máquinas, EPC, sinalização, iluminação, etc)</span></label>
+              <label><input type="radio" name="desvio_classificacao" value="Sugestão/Melhoria" data-form="desvio" data-group="body" /> <span>Sugestão/Melhoria</span></label>
+              <label><input type="radio" name="desvio_classificacao" value="Projetos" data-form="desvio" data-group="body" /> <span>Projetos (Ex.: sistema de combate a incêndio, alteração de layout, instalação de equipamento, etc)</span></label>
             </div>
+
+            <label id="desvio_acaoComportamentoWrap" class="hidden">
+              <span>Em caso de Comportamento Inseguro, descreva a ação tomada (ver e agir)</span>
+              <small>Obs.: Para as demais classificações, considerar “não aplicável” como resposta.</small>
+              <textarea id="desvio_acaoComportamento" data-form="desvio" data-group="body" rows="3" placeholder="Sua resposta"></textarea>
+            </label>
 
             <div class="section-label">Regra de Ouro</div>
             <div class="checkbox-stack compact">

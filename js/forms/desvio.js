@@ -1,9 +1,26 @@
 (function () {
-  const { value, formatDateTimeBR, getRadioValue, getCheckedValues, nowDateTimeInput, setValue } = window.OpsUtils;
+  const { byId, value, formatDateTimeBR, getRadioValue, getCheckedValues, nowDateTimeInput, setValue } = window.OpsUtils;
+
+  const COMPORTAMENTO_INSEGURO = 'Comportamento Inseguro';
+
+  function isComportamentoInseguro() {
+    return getRadioValue('desvio_classificacao') === COMPORTAMENTO_INSEGURO;
+  }
+
+  function toggleComportamentoField() {
+    const wrap = byId('desvio_acaoComportamentoWrap');
+    if (!wrap) return;
+
+    wrap.classList.toggle('hidden', !isComportamentoInseguro());
+  }
 
   function buildOutput() {
     const setor = getCheckedValues('desvio_setor');
     const regras = getCheckedValues('desvio_regraOuro');
+    const comportamentoInseguro = isComportamentoInseguro();
+    const acaoComportamento = comportamentoInseguro
+      ? (value('desvio_acaoComportamento') || '-')
+      : 'NA';
 
     let text = `⚠️ *CAÇA-DESVIO*\n\n`;
 
@@ -19,6 +36,7 @@
     text += `*Status atual:*\n${getRadioValue('desvio_status') || '-'}\n\n`;
     text += `*Setor responsável pela correção:*\n${setor.length ? setor.join(' / ') : '-'}\n\n`;
     text += `*Classificação do desvio:*\n${getRadioValue('desvio_classificacao') || '-'}\n\n`;
+    text += `*Ação tomada para Comportamento Inseguro:*\n${acaoComportamento}\n\n`;
     text += `*Regra de Ouro:*\n${regras.length ? regras.join(' / ') : '-'}\n\n`;
     text += `*Sugestão de Criticidade:*\n${getRadioValue('desvio_criticidade') || '-'}\n\n`;
     text += `*Evidência:*\n${value('desvio_evidencia') || 'Enviar após a mensagem, se aplicável.'}`;
@@ -28,11 +46,13 @@
 
   function initialiseDefaults() {
     if (!value('desvio_dataHora')) setValue('desvio_dataHora', nowDateTimeInput());
+    toggleComportamentoField();
   }
 
   window.OpsFormsModules = window.OpsFormsModules || {};
   window.OpsFormsModules.desvio = {
     buildOutput,
-    initialiseDefaults
+    initialiseDefaults,
+    toggleComportamentoField
   };
 })();

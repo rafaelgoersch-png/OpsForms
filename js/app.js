@@ -69,6 +69,7 @@
 
   function updateOutput() {
     sitopSupervisor.syncTurmasField();
+    desvio.toggleComportamentoField();
     evento.toggleTimeFields();
     evento.toggleActionField();
     evento.updateCriticalityVisual();
@@ -190,6 +191,7 @@
     if (byId('sitop_npt_list') && !byId('sitop_npt_list').children.length) sitop.addNpt();
     if (byId('sitop_incident_list') && !byId('sitop_incident_list').children.length) sitop.addIncident();
     sitopSupervisor.initialiseDefaults();
+    desvio.initialiseDefaults();
   }
 
   function bindStaticButtons() {
