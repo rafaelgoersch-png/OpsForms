@@ -69,6 +69,9 @@
     const { sitop, sitopSupervisor } = window.OpsFormsModules;
     const state = {
       activeFormType,
+      equipments: sitop.collectEquipments(),
+      riskDecisions: sitop.collectRiskDecisions(),
+      lessons: sitop.collectLessons(),
       npts: sitop.collectNpts(),
       incidents: sitop.collectIncidents(),
       supervisorAtividadesPrincipais: sitopSupervisor.collectAtividadesPrincipais(),
@@ -123,6 +126,9 @@
       }
     });
 
+    if (byId('sitop_equipamento_list')) byId('sitop_equipamento_list').innerHTML = '';
+    if (byId('sitop_risco_decisao_list')) byId('sitop_risco_decisao_list').innerHTML = '';
+    if (byId('sitop_licao_list')) byId('sitop_licao_list').innerHTML = '';
     if (byId('sitop_npt_list')) byId('sitop_npt_list').innerHTML = '';
     if (byId('sitop_incident_list')) byId('sitop_incident_list').innerHTML = '';
     if (byId('sup_atividade_principal_list')) byId('sup_atividade_principal_list').innerHTML = '';
@@ -131,6 +137,9 @@
     if (byId('sup_prontos_list')) byId('sup_prontos_list').innerHTML = '';
     if (byId('sup_incident_list')) byId('sup_incident_list').innerHTML = '';
 
+    (state.equipments || []).forEach(sitop.addEquipment);
+    (state.riskDecisions || []).forEach(sitop.addRiskDecision);
+    (state.lessons || []).forEach(sitop.addLesson);
     (state.npts || []).forEach(sitop.addNpt);
     (state.incidents || []).forEach(sitop.addIncident);
     (state.supervisorAtividadesPrincipais || []).forEach(sitopSupervisor.addAtividadePrincipal);
