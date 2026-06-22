@@ -15,11 +15,11 @@
   }
 
   function getRigFieldIds() {
-    return ['sitop_sonda', 'sup_sonda', 'desvio_sonda', 'evento_rig'];
+    return ['sitop_sonda', 'sup_sonda', 'sond_sonda', 'desvio_sonda', 'evento_rig'];
   }
 
   function getWellFieldIds() {
-    return ['sitop_poco', 'sup_poco', 'desvio_poco', 'evento_well'];
+    return ['sitop_poco', 'sup_poco', 'sond_poco', 'desvio_poco', 'evento_well'];
   }
 
   function getCurrentRigValue() {
@@ -66,7 +66,7 @@
   }
 
   function collectState(activeFormType) {
-    const { sitop, sitopSupervisor } = window.OpsFormsModules;
+    const { sitop, sitopSupervisor, sitopSondador } = window.OpsFormsModules;
     const state = {
       activeFormType,
       equipments: sitop.collectEquipments(),
@@ -79,6 +79,7 @@
       supervisorAtividadesParalelas: sitopSupervisor.collectAtividadesParalelas(),
       supervisorProntos: sitopSupervisor.collectProntos(),
       supervisorIncidents: sitopSupervisor.collectIncidents(),
+      sondadorTimeline: sitopSondador.collectTimeline(),
       fields: {}
     };
 
@@ -103,7 +104,7 @@
   }
 
   function applyState(state, setActiveFormType) {
-    const { sitop, sitopSupervisor } = window.OpsFormsModules;
+    const { sitop, sitopSupervisor, sitopSondador } = window.OpsFormsModules;
     if (!state || typeof state !== 'object') return;
 
     setActiveFormType(state.activeFormType || 'sitop');
@@ -136,6 +137,7 @@
     if (byId('sup_atividade_paralela_list')) byId('sup_atividade_paralela_list').innerHTML = '';
     if (byId('sup_prontos_list')) byId('sup_prontos_list').innerHTML = '';
     if (byId('sup_incident_list')) byId('sup_incident_list').innerHTML = '';
+    if (byId('sond_timeline_list')) byId('sond_timeline_list').innerHTML = '';
 
     (state.equipments || []).forEach(sitop.addEquipment);
     (state.riskDecisions || []).forEach(sitop.addRiskDecision);
@@ -147,6 +149,7 @@
     (state.supervisorAtividadesParalelas || []).forEach(sitopSupervisor.addAtividadeParalela);
     (state.supervisorProntos || []).forEach(sitopSupervisor.addPronto);
     (state.supervisorIncidents || []).forEach(sitopSupervisor.addIncident);
+    (state.sondadorTimeline || []).forEach(sitopSondador.addTimelineItem);
     sitopSupervisor.syncTurmasField();
   }
 

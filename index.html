@@ -49,6 +49,15 @@
           </span>
         </label>
 
+
+        <label class="selector-option">
+          <input type="radio" name="formType" value="sitopSondador" />
+          <span>
+            <strong>SITOP - Sondador</strong>
+            <small>Registro 6h com linha do tempo em intervalos de 15 min</small>
+          </span>
+        </label>
+
         <label class="selector-option">
           <input type="radio" name="formType" value="desvio" />
           <span>
@@ -410,6 +419,140 @@
         </section>
 
 
+
+        <!-- SITOP SONDADOR -->
+        <section id="sitopSondadorForm" class="form-view hidden">
+          <section class="card">
+            <h2>1. Cabeçalho — SITOP Sondador</h2>
+
+            <div class="grid two">
+              <label>
+                <span>Sonda</span>
+                <select id="sond_sonda" data-form="sitopSondador" data-group="header"></select>
+              </label>
+
+              <label>
+                <span>Poço</span>
+                <input id="sond_poco" data-form="sitopSondador" data-group="header" />
+              </label>
+
+              <label>
+                <span>Sondador</span>
+                <input id="sond_sondador" data-form="sitopSondador" data-group="header" />
+              </label>
+
+              <label>
+                <span>Assistente de sondador</span>
+                <input id="sond_assistente" data-form="sitopSondador" data-group="header" />
+              </label>
+
+              <label>
+                <span>Fiscal</span>
+                <input id="sond_fiscal" data-form="sitopSondador" data-group="header" />
+              </label>
+
+              <label>
+                <span>Supervisor</span>
+                <input id="sond_supervisor" data-form="sitopSondador" data-group="header" />
+              </label>
+
+              <label>
+                <span>BDO</span>
+                <input id="sond_bdo" data-form="sitopSondador" data-group="body" placeholder="Ex.: 42" />
+              </label>
+
+              <label>
+                <span>Data</span>
+                <input type="date" id="sond_data" data-form="sitopSondador" data-group="body" />
+              </label>
+
+              <label>
+                <span>Turno</span>
+                <select id="sond_turno" data-form="sitopSondador" data-group="body">
+                  <option value="">Selecione...</option>
+                  <option>00:00-06:00</option>
+                  <option>06:00-12:00</option>
+                  <option>12:00-18:00</option>
+                  <option>18:00-00:00</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Situação operacional</span>
+                <input id="sond_situacao" data-form="sitopSondador" data-group="body" placeholder="Ex.: Descendo coluna" />
+              </label>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-title-row">
+              <h2>2. Linha do tempo</h2>
+              <button id="addSondadorTimelineBtn" type="button">Adicionar linha</button>
+            </div>
+
+            <p class="hint">Use horários de 15 em 15 minutos. Ex.: 00:00, 00:15, 00:30, 00:45.</p>
+            <div id="sond_timeline_list" class="dynamic-list"></div>
+          </section>
+
+          <section class="card">
+            <h2>3. Circulação das bombas</h2>
+
+            <div class="grid two">
+              <label>
+                <span>Bomba 1 — status</span>
+                <select id="sond_b1_status" data-form="sitopSondador" data-group="body">
+                  <option value="">Selecione...</option>
+                  <option>Ativa</option>
+                  <option>Inativa</option>
+                  <option>Em manutenção</option>
+                  <option>Stand-by</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Bomba 1 — horas de circulação</span>
+                <input id="sond_b1_horas" data-form="sitopSondador" data-group="body" inputmode="decimal" placeholder="Ex.: 4,5 h" />
+              </label>
+
+              <label>
+                <span>Bomba 2 — status</span>
+                <select id="sond_b2_status" data-form="sitopSondador" data-group="body">
+                  <option value="">Selecione...</option>
+                  <option>Ativa</option>
+                  <option>Inativa</option>
+                  <option>Em manutenção</option>
+                  <option>Stand-by</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Bomba 2 — horas de circulação</span>
+                <input id="sond_b2_horas" data-form="sitopSondador" data-group="body" inputmode="decimal" placeholder="Ex.: 4,5 h" />
+              </label>
+            </div>
+
+            <label>
+              <span>Observação sobre bombas</span>
+              <textarea id="sond_bombas_obs" data-form="sitopSondador" data-group="body" rows="3" placeholder="Ex.: bombas alternadas, limitação, circulação simultânea, anomalia."></textarea>
+            </label>
+          </section>
+
+          <section class="card">
+            <h2>4. Atividades paralelas e observações</h2>
+
+            <label>
+              <span>Atividades paralelas</span>
+              <textarea id="sond_atividades_paralelas" data-form="sitopSondador" data-group="body" rows="3" placeholder="Ex.: Adensando fluido"></textarea>
+            </label>
+
+            <label>
+              <span>Observações gerais</span>
+              <textarea id="sond_observacoes" data-form="sitopSondador" data-group="body" rows="4" placeholder="Dificuldades, atenção para o próximo quarto, pendências simples."></textarea>
+            </label>
+          </section>
+        </section>
+
+
         <!-- CAÇA DESVIO -->
         <section id="desvioForm" class="form-view hidden">
           <section class="card">
@@ -719,6 +862,7 @@
   <script src="js/utils.js"></script>
   <script src="js/forms/sitop.js"></script>
   <script src="js/forms/sitop-supervisor.js"></script>
+  <script src="js/forms/sitop-sondador.js"></script>
   <script src="js/forms/desvio.js"></script>
   <script src="js/forms/evento.js"></script>
   <script src="js/storage.js"></script>
