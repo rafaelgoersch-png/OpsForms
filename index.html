@@ -116,140 +116,32 @@
           </section>
 
           <section class="card">
-            <h2>2. Resumo executivo</h2>
+            <h2>2. Dados do turno</h2>
 
             <label>
-              <span>Situação do Projeto</span>
-              <textarea id="sitop_situacao" data-form="sitop" data-group="body" rows="4" placeholder="Condição geral, principal decisão e atenção do turno."></textarea>
+              <span>1. Situação do Projeto</span>
+              <textarea id="sitop_situacao" data-form="sitop" data-group="body" rows="4"></textarea>
             </label>
 
             <label>
-              <span>Próximas 12h</span>
+              <span>2. Próximas 12h</span>
               <textarea id="sitop_proximas" data-form="sitop" data-group="body" rows="4"></textarea>
             </label>
 
             <label>
-              <span>Desempenho vs Programa</span>
+              <span>3. Desempenho vs Programa</span>
               <input id="sitop_desempenho" data-form="sitop" data-group="body" />
             </label>
-          </section>
-
-          <section class="card">
-            <h2>3. Estado do poço</h2>
-
-            <div class="grid two">
-              <label><span>Fase / seção atual</span><input id="sitop_secao_atual" data-form="sitop" data-group="body" placeholder="Ex.: 17 1/2&quot;" /></label>
-              <label><span>Profundidade atual - MD</span><input id="sitop_md_atual" data-form="sitop" data-group="body" placeholder="Ex.: 1245 m" /></label>
-              <label><span>Profundidade vertical - TVD</span><input id="sitop_tvd_atual" data-form="sitop" data-group="body" placeholder="Se aplicável" /></label>
-              <label><span>Último revestimento</span><input id="sitop_ultimo_revestimento" data-form="sitop" data-group="body" placeholder="Ex.: 18 5/8&quot;" /></label>
-              <label><span>Sapata do último revestimento - MD</span><input id="sitop_sapata_md" data-form="sitop" data-group="body" placeholder="Ex.: 515 m MD" /></label>
-              <label><span>Sapata do último revestimento - TVD</span><input id="sitop_sapata_tvd" data-form="sitop" data-group="body" placeholder="Ex.: 500 m TVD" /></label>
-              <label><span>Float shoe / float collar</span><input id="sitop_float" data-form="sitop" data-group="body" placeholder="Ex.: float collar a 500 m" /></label>
-              <label><span>Fluido atual</span><input id="sitop_fluido" data-form="sitop" data-group="body" /></label>
-              <label><span>Peso do fluido</span><input id="sitop_peso_fluido" data-form="sitop" data-group="body" placeholder="Ex.: 9,4 ppg" /></label>
-            </div>
 
             <label>
-              <span>Observação crítica do poço</span>
-              <textarea id="sitop_obs_poco" data-form="sitop" data-group="body" rows="3"></textarea>
-            </label>
-          </section>
-
-          <section class="card">
-            <h2>4. Volumetria / controle hidráulico</h2>
-
-            <h3>BHA fixo</h3>
-            <div class="grid two">
-              <label><span>Volume interno fixo do BHA</span><input id="sitop_bha_volume_interno" data-form="sitop" data-group="body" placeholder="Ex.: 8,5 bbl" /></label>
-              <label><span>Volume anular fixo do BHA</span><input id="sitop_bha_volume_anular" data-form="sitop" data-group="body" placeholder="Ex.: BHA x poço aberto, em bbl" /></label>
-            </div>
-
-            <h3>Drill pipe / stands</h3>
-            <div class="grid two">
-              <label><span>Volume interno por stand de DP</span><input id="sitop_dp_volume_por_stand" data-form="sitop" data-group="body" placeholder="Ex.: 1,25 bbl/stand" /></label>
-              <label><span>Nº de stands conectados</span><input id="sitop_dp_num_stands" data-form="sitop" data-group="body" placeholder="Ex.: 32" /></label>
-              <label><span>Volume interno total dos stands</span><input id="sitop_calc_dp_volume_total" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
-              <label><span>Volume interno total até broca</span><input id="sitop_calc_volume_ate_broca" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
-            </div>
-
-            <h3>Anular</h3>
-            <div class="grid two">
-              <label><span>Comprimento DP em poço aberto</span><input id="sitop_oh_dp_metros" data-form="sitop" data-group="body" placeholder="Ex.: m" /></label>
-              <label><span>Capacidade anular DP x poço aberto</span><input id="sitop_oh_capacidade_bbl_m" data-form="sitop" data-group="body" placeholder="Ex.: bbl/m" /></label>
-              <label><span>Volume anular em poço aberto</span><input id="sitop_calc_oh_volume" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
-              <label><span>Comprimento DP em poço revestido</span><input id="sitop_cased_dp_metros" data-form="sitop" data-group="body" placeholder="Ex.: m" /></label>
-              <label><span>Capacidade anular DP x revestimento</span><input id="sitop_cased_capacidade_bbl_m" data-form="sitop" data-group="body" placeholder="Ex.: bbl/m" /></label>
-              <label><span>Volume anular em poço revestido</span><input id="sitop_calc_cased_volume" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
-              <label><span>Volume anular total fundo-superfície</span><input id="sitop_calc_anular_total" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
-              <label><span>Margem operacional</span><input id="sitop_margem_operacional" data-form="sitop" data-group="body" placeholder="Ex.: bbl" /></label>
-            </div>
-
-            <h3>Strokes / marcos de deslocamento</h3>
-            <div class="grid two">
-              <label><span>Fator bomba ativo</span><input id="sitop_fator_bomba" data-form="sitop" data-group="body" placeholder="Ex.: 0,117 bbl/stk" /></label>
-              <label><span>Strokes até broca</span><input id="sitop_calc_stk_ate_broca" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
-              <label><span>Strokes fundo-sapata</span><input id="sitop_calc_stk_fundo_sapata" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
-              <label><span>Strokes sapata-superfície</span><input id="sitop_calc_stk_sapata_superficie" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
-              <label><span>Strokes fundo-superfície</span><input id="sitop_calc_stk_fundo_superficie" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
-              <label><span>Strokes fundo-superfície + margem</span><input id="sitop_calc_stk_total_margem" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
-            </div>
-
-            <h3>Controle de manobra</h3>
-            <div class="grid two">
-              <label><span>Deslocamento metálico por stand</span><input id="sitop_desloc_metal_por_stand" data-form="sitop" data-group="body" placeholder="Ex.: bbl/stand" /></label>
-              <label><span>Stands manobrados</span><input id="sitop_stands_manobrados" data-form="sitop" data-group="body" placeholder="Ex.: 10" /></label>
-              <label><span>Volume esperado no trip tank</span><input id="sitop_calc_trip_tank" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
-            </div>
-          </section>
-
-          <section class="card">
-            <h2>5. Bombas / limites</h2>
-
-            <div class="grid two">
-              <label><span>Bomba ativa no momento</span><input id="sitop_bomba_ativa" data-form="sitop" data-group="body" /></label>
-              <label><span>Pop-off configurada</span><input id="sitop_popoff" data-form="sitop" data-group="body" placeholder="Configuração comum para as duas bombas" /></label>
-              <label><span>Bomba 1 - camisa instalada</span><input id="sitop_b1_camisa" data-form="sitop" data-group="body" /></label>
-              <label><span>Bomba 1 - fator</span><input id="sitop_b1_fator" data-form="sitop" data-group="body" placeholder="Ex.: bbl/stk" /></label>
-              <label><span>Bomba 2 - camisa instalada</span><input id="sitop_b2_camisa" data-form="sitop" data-group="body" /></label>
-              <label><span>Bomba 2 - fator</span><input id="sitop_b2_fator" data-form="sitop" data-group="body" placeholder="Ex.: bbl/stk" /></label>
-            </div>
-
-            <label>
-              <span>Limitação conhecida das bombas</span>
-              <textarea id="sitop_bombas_limitacao" data-form="sitop" data-group="body" rows="3"></textarea>
+              <span>6. Observações Relevantes</span>
+              <textarea id="sitop_observacoes" data-form="sitop" data-group="body" rows="4"></textarea>
             </label>
           </section>
 
           <section class="card">
             <div class="card-title-row">
-              <h2>6. Equipamentos em atenção</h2>
-              <button type="button" id="addEquipmentBtn">Adicionar equipamento</button>
-            </div>
-
-            <div id="sitop_equipamento_list" class="dynamic-list"></div>
-          </section>
-
-          <section class="card">
-            <div class="card-title-row">
-              <h2>7. Riscos / decisões</h2>
-              <button type="button" id="addRiskDecisionBtn">Adicionar risco/decisão</button>
-            </div>
-
-            <div id="sitop_risco_decisao_list" class="dynamic-list"></div>
-          </section>
-
-          <section class="card">
-            <div class="card-title-row">
-              <h2>8. Lições aprendidas</h2>
-              <button type="button" id="addLessonBtn">Adicionar lição</button>
-            </div>
-
-            <div id="sitop_licao_list" class="dynamic-list"></div>
-          </section>
-
-          <section class="card">
-            <div class="card-title-row">
-              <h2>9. NPT do projeto</h2>
+              <h2>3. NPT do projeto</h2>
               <button type="button" id="addNptBtn">Adicionar NPT</button>
             </div>
 
@@ -259,21 +151,12 @@
 
           <section class="card">
             <div class="card-title-row">
-              <h2>10. Incidentes / Acidentes</h2>
+              <h2>4. Incidentes / Acidentes</h2>
               <button type="button" id="addIncidentBtn">Adicionar incidente</button>
             </div>
 
             <div id="sitop_incident_list" class="dynamic-list"></div>
 
-          </section>
-
-          <section class="card">
-            <h2>11. Observações relevantes</h2>
-
-            <label>
-              <span>Observações adicionais</span>
-              <textarea id="sitop_observacoes" data-form="sitop" data-group="body" rows="4"></textarea>
-            </label>
           </section>
         </section>
 

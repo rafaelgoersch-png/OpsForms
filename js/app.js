@@ -199,9 +199,6 @@
     }
 
     storage.applyPrefsToEmptyHeaderFields();
-    if (byId('sitop_equipamento_list') && !byId('sitop_equipamento_list').children.length) sitop.addEquipment();
-    if (byId('sitop_risco_decisao_list') && !byId('sitop_risco_decisao_list').children.length) sitop.addRiskDecision();
-    if (byId('sitop_licao_list') && !byId('sitop_licao_list').children.length) sitop.addLesson();
     if (byId('sitop_npt_list') && !byId('sitop_npt_list').children.length) sitop.addNpt();
     if (byId('sitop_incident_list') && !byId('sitop_incident_list').children.length) sitop.addIncident();
     if (byId('sond_timeline_list') && !byId('sond_timeline_list').children.length) sitopSondador.addTimelineItem();
@@ -221,20 +218,8 @@
       input.addEventListener('change', () => switchForm(input.value));
     });
 
-    bindClick('addEquipmentBtn', () => {
-      sitop.addEquipment();
-      updateOutput();
-    });
 
-    bindClick('addRiskDecisionBtn', () => {
-      sitop.addRiskDecision();
-      updateOutput();
-    });
 
-    bindClick('addLessonBtn', () => {
-      sitop.addLesson();
-      updateOutput();
-    });
 
     bindClick('addNptBtn', () => {
       sitop.addNpt();
