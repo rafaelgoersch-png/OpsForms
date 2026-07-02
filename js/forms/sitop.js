@@ -1,4 +1,5 @@
 (function () {
+  // SITOP Fiscal restaurado sem volumetria / hidráulica. Versão v3.
   const { byId, value, formatDateBR, formatDateTimeBR, normalizeDateTimeInput, todayDateInput } = window.OpsUtils;
   let attachAutoHandlers = () => {};
   let updateOutput = () => {};
