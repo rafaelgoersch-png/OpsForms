@@ -218,9 +218,6 @@
       input.addEventListener('change', () => switchForm(input.value));
     });
 
-
-
-
     bindClick('addNptBtn', () => {
       sitop.addNpt();
       updateOutput();
