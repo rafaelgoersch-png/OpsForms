@@ -49,6 +49,15 @@
           </span>
         </label>
 
+
+        <label class="selector-option">
+          <input type="radio" name="formType" value="sitopSondador" />
+          <span>
+            <strong>SITOP - Sondador</strong>
+            <small>Registro 6h com linha do tempo em intervalos de 15 min</small>
+          </span>
+        </label>
+
         <label class="selector-option">
           <input type="radio" name="formType" value="desvio" />
           <span>
@@ -107,32 +116,140 @@
           </section>
 
           <section class="card">
-            <h2>2. Dados do turno</h2>
+            <h2>2. Resumo executivo</h2>
 
             <label>
-              <span>1. Situação do Projeto</span>
-              <textarea id="sitop_situacao" data-form="sitop" data-group="body" rows="4"></textarea>
+              <span>Situação do Projeto</span>
+              <textarea id="sitop_situacao" data-form="sitop" data-group="body" rows="4" placeholder="Condição geral, principal decisão e atenção do turno."></textarea>
             </label>
 
             <label>
-              <span>2. Próximas 12h</span>
+              <span>Próximas 12h</span>
               <textarea id="sitop_proximas" data-form="sitop" data-group="body" rows="4"></textarea>
             </label>
 
             <label>
-              <span>3. Desempenho vs Programa</span>
+              <span>Desempenho vs Programa</span>
               <input id="sitop_desempenho" data-form="sitop" data-group="body" />
             </label>
+          </section>
+
+          <section class="card">
+            <h2>3. Estado do poço</h2>
+
+            <div class="grid two">
+              <label><span>Fase / seção atual</span><input id="sitop_secao_atual" data-form="sitop" data-group="body" placeholder="Ex.: 17 1/2&quot;" /></label>
+              <label><span>Profundidade atual - MD</span><input id="sitop_md_atual" data-form="sitop" data-group="body" placeholder="Ex.: 1245 m" /></label>
+              <label><span>Profundidade vertical - TVD</span><input id="sitop_tvd_atual" data-form="sitop" data-group="body" placeholder="Se aplicável" /></label>
+              <label><span>Último revestimento</span><input id="sitop_ultimo_revestimento" data-form="sitop" data-group="body" placeholder="Ex.: 18 5/8&quot;" /></label>
+              <label><span>Sapata do último revestimento - MD</span><input id="sitop_sapata_md" data-form="sitop" data-group="body" placeholder="Ex.: 515 m MD" /></label>
+              <label><span>Sapata do último revestimento - TVD</span><input id="sitop_sapata_tvd" data-form="sitop" data-group="body" placeholder="Ex.: 500 m TVD" /></label>
+              <label><span>Float shoe / float collar</span><input id="sitop_float" data-form="sitop" data-group="body" placeholder="Ex.: float collar a 500 m" /></label>
+              <label><span>Fluido atual</span><input id="sitop_fluido" data-form="sitop" data-group="body" /></label>
+              <label><span>Peso do fluido</span><input id="sitop_peso_fluido" data-form="sitop" data-group="body" placeholder="Ex.: 9,4 ppg" /></label>
+            </div>
 
             <label>
-              <span>6. Observações Relevantes</span>
-              <textarea id="sitop_observacoes" data-form="sitop" data-group="body" rows="4"></textarea>
+              <span>Observação crítica do poço</span>
+              <textarea id="sitop_obs_poco" data-form="sitop" data-group="body" rows="3"></textarea>
+            </label>
+          </section>
+
+          <section class="card">
+            <h2>4. Volumetria / controle hidráulico</h2>
+
+            <h3>BHA fixo</h3>
+            <div class="grid two">
+              <label><span>Volume interno fixo do BHA</span><input id="sitop_bha_volume_interno" data-form="sitop" data-group="body" placeholder="Ex.: 8,5 bbl" /></label>
+              <label><span>Volume anular fixo do BHA</span><input id="sitop_bha_volume_anular" data-form="sitop" data-group="body" placeholder="Ex.: BHA x poço aberto, em bbl" /></label>
+            </div>
+
+            <h3>Drill pipe / stands</h3>
+            <div class="grid two">
+              <label><span>Volume interno por stand de DP</span><input id="sitop_dp_volume_por_stand" data-form="sitop" data-group="body" placeholder="Ex.: 1,25 bbl/stand" /></label>
+              <label><span>Nº de stands conectados</span><input id="sitop_dp_num_stands" data-form="sitop" data-group="body" placeholder="Ex.: 32" /></label>
+              <label><span>Volume interno total dos stands</span><input id="sitop_calc_dp_volume_total" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
+              <label><span>Volume interno total até broca</span><input id="sitop_calc_volume_ate_broca" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
+            </div>
+
+            <h3>Anular</h3>
+            <div class="grid two">
+              <label><span>Comprimento DP em poço aberto</span><input id="sitop_oh_dp_metros" data-form="sitop" data-group="body" placeholder="Ex.: m" /></label>
+              <label><span>Capacidade anular DP x poço aberto</span><input id="sitop_oh_capacidade_bbl_m" data-form="sitop" data-group="body" placeholder="Ex.: bbl/m" /></label>
+              <label><span>Volume anular em poço aberto</span><input id="sitop_calc_oh_volume" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
+              <label><span>Comprimento DP em poço revestido</span><input id="sitop_cased_dp_metros" data-form="sitop" data-group="body" placeholder="Ex.: m" /></label>
+              <label><span>Capacidade anular DP x revestimento</span><input id="sitop_cased_capacidade_bbl_m" data-form="sitop" data-group="body" placeholder="Ex.: bbl/m" /></label>
+              <label><span>Volume anular em poço revestido</span><input id="sitop_calc_cased_volume" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
+              <label><span>Volume anular total fundo-superfície</span><input id="sitop_calc_anular_total" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
+              <label><span>Margem operacional</span><input id="sitop_margem_operacional" data-form="sitop" data-group="body" placeholder="Ex.: bbl" /></label>
+            </div>
+
+            <h3>Strokes / marcos de deslocamento</h3>
+            <div class="grid two">
+              <label><span>Fator bomba ativo</span><input id="sitop_fator_bomba" data-form="sitop" data-group="body" placeholder="Ex.: 0,117 bbl/stk" /></label>
+              <label><span>Strokes até broca</span><input id="sitop_calc_stk_ate_broca" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
+              <label><span>Strokes fundo-sapata</span><input id="sitop_calc_stk_fundo_sapata" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
+              <label><span>Strokes sapata-superfície</span><input id="sitop_calc_stk_sapata_superficie" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
+              <label><span>Strokes fundo-superfície</span><input id="sitop_calc_stk_fundo_superficie" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
+              <label><span>Strokes fundo-superfície + margem</span><input id="sitop_calc_stk_total_margem" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
+            </div>
+
+            <h3>Controle de manobra</h3>
+            <div class="grid two">
+              <label><span>Deslocamento metálico por stand</span><input id="sitop_desloc_metal_por_stand" data-form="sitop" data-group="body" placeholder="Ex.: bbl/stand" /></label>
+              <label><span>Stands manobrados</span><input id="sitop_stands_manobrados" data-form="sitop" data-group="body" placeholder="Ex.: 10" /></label>
+              <label><span>Volume esperado no trip tank</span><input id="sitop_calc_trip_tank" data-form="sitop" data-group="body" readonly placeholder="Calculado" /></label>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>5. Bombas / limites</h2>
+
+            <div class="grid two">
+              <label><span>Bomba ativa no momento</span><input id="sitop_bomba_ativa" data-form="sitop" data-group="body" /></label>
+              <label><span>Pop-off configurada</span><input id="sitop_popoff" data-form="sitop" data-group="body" placeholder="Configuração comum para as duas bombas" /></label>
+              <label><span>Bomba 1 - camisa instalada</span><input id="sitop_b1_camisa" data-form="sitop" data-group="body" /></label>
+              <label><span>Bomba 1 - fator</span><input id="sitop_b1_fator" data-form="sitop" data-group="body" placeholder="Ex.: bbl/stk" /></label>
+              <label><span>Bomba 2 - camisa instalada</span><input id="sitop_b2_camisa" data-form="sitop" data-group="body" /></label>
+              <label><span>Bomba 2 - fator</span><input id="sitop_b2_fator" data-form="sitop" data-group="body" placeholder="Ex.: bbl/stk" /></label>
+            </div>
+
+            <label>
+              <span>Limitação conhecida das bombas</span>
+              <textarea id="sitop_bombas_limitacao" data-form="sitop" data-group="body" rows="3"></textarea>
             </label>
           </section>
 
           <section class="card">
             <div class="card-title-row">
-              <h2>3. NPT do projeto</h2>
+              <h2>6. Equipamentos em atenção</h2>
+              <button type="button" id="addEquipmentBtn">Adicionar equipamento</button>
+            </div>
+
+            <div id="sitop_equipamento_list" class="dynamic-list"></div>
+          </section>
+
+          <section class="card">
+            <div class="card-title-row">
+              <h2>7. Riscos / decisões</h2>
+              <button type="button" id="addRiskDecisionBtn">Adicionar risco/decisão</button>
+            </div>
+
+            <div id="sitop_risco_decisao_list" class="dynamic-list"></div>
+          </section>
+
+          <section class="card">
+            <div class="card-title-row">
+              <h2>8. Lições aprendidas</h2>
+              <button type="button" id="addLessonBtn">Adicionar lição</button>
+            </div>
+
+            <div id="sitop_licao_list" class="dynamic-list"></div>
+          </section>
+
+          <section class="card">
+            <div class="card-title-row">
+              <h2>9. NPT do projeto</h2>
               <button type="button" id="addNptBtn">Adicionar NPT</button>
             </div>
 
@@ -142,12 +259,21 @@
 
           <section class="card">
             <div class="card-title-row">
-              <h2>4. Incidentes / Acidentes</h2>
+              <h2>10. Incidentes / Acidentes</h2>
               <button type="button" id="addIncidentBtn">Adicionar incidente</button>
             </div>
 
             <div id="sitop_incident_list" class="dynamic-list"></div>
 
+          </section>
+
+          <section class="card">
+            <h2>11. Observações relevantes</h2>
+
+            <label>
+              <span>Observações adicionais</span>
+              <textarea id="sitop_observacoes" data-form="sitop" data-group="body" rows="4"></textarea>
+            </label>
           </section>
         </section>
 
@@ -200,7 +326,16 @@
           </section>
 
           <section class="card">
-            <h2>2. Atividades</h2>
+            <h2>2. DDS do turno</h2>
+
+            <label>
+              <span>Assuntos tratados no DDS</span>
+              <textarea id="sup_dds_assuntos" data-form="sitopSupervisor" data-group="body" rows="4" placeholder="Informar assuntos tratados no DDS do turno: segurança, operação crítica, mudança de camisa/PSV, movimentação de carga, lições rápidas, alertas e pontos de atenção."></textarea>
+            </label>
+          </section>
+
+          <section class="card">
+            <h2>3. Atividades</h2>
 
             <div class="field-block">
               <span class="section-label">Atividades realizadas nas últimas 12h</span>
@@ -236,27 +371,36 @@
           </section>
 
           <section class="card">
-            <h2>3. Equipamentos / Integridade</h2>
+            <h2>4. Equipamentos / Integridade</h2>
+
+            <div class="card-title-row compact-row">
+              <h3>Preventivas previstas e executadas</h3>
+              <button type="button" id="addSupervisorPreventivaBtn">Adicionar preventiva</button>
+            </div>
+            <div id="sup_preventivas_list" class="dynamic-list"></div>
+
+            <div class="card-title-row compact-row">
+              <h3>Falhas detectadas e status das correções</h3>
+              <button type="button" id="addSupervisorFalhaBtn">Adicionar falha</button>
+            </div>
+            <div id="sup_falhas_list" class="dynamic-list"></div>
+
+            <div class="card-title-row compact-row">
+              <h3>Substituições operacionais / componentes críticos</h3>
+              <button type="button" id="addSupervisorSubstituicaoBtn">Adicionar substituição</button>
+            </div>
+            <p class="hint">Usar para substituição de camisa, pistão e telas de peneira. Em caso de troca de camisa, informar obrigatoriamente a modificação ou validação da PSV/pop-off até isso entrar no checklist do torrista.</p>
+            <div id="sup_substituicoes_list" class="dynamic-list"></div>
 
             <label>
-              <span>Preventivas previstas e executadas</span>
-              <textarea id="sup_previstas_executadas" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Informar preventivas previstas/executadas pela Integridade, status das demandas de manutenção da sonda e pontos que dependem de apoio da manutenção."></textarea>
-            </label>
-
-            <label>
-              <span>Falhas detectadas e status das correções</span>
-              <textarea id="sup_falhas_status" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Informar falhas detectadas pela Operação, equipamento afetado, impacto operacional e status da correção pela Integridade/manutenção."></textarea>
-            </label>
-
-            <label>
-              <span>Corretivas operacionais</span>
-              <textarea id="sup_corretivas" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Informar ações operacionais executadas pela supervisão/operação, como voltas no pistão das bombas e qual pistão, manutenção de válvula, limpeza de filtro, troca de camisa da bomba, configuração da pop-off, telas, camisas ou outras correções operacionais."></textarea>
+              <span>Corretivas operacionais gerais</span>
+              <textarea id="sup_corretivas" data-form="sitopSupervisor" data-group="body" rows="3" placeholder="Informar outras ações operacionais executadas pela supervisão/operação, como manutenção de válvula, limpeza de filtro ou outras correções operacionais."></textarea>
             </label>
           </section>
 
           <section class="card">
             <div class="card-title-row">
-              <h2>4. PRONTOS</h2>
+              <h2>5. PRONTOS</h2>
               <button type="button" id="addSupervisorProntoBtn">Adicionar PRONTOS</button>
             </div>
 
@@ -265,7 +409,7 @@
           </section>
 
           <section class="card">
-            <h2>5. Suporte Operacional</h2>
+            <h2>6. Suporte Operacional</h2>
 
             <label>
               <span>Falta de materiais / recursos logísticos</span>
@@ -275,7 +419,7 @@
 
           <section class="card">
             <div class="card-title-row">
-              <h2>6. Incidentes / Acidentes</h2>
+              <h2>7. Incidentes / Acidentes</h2>
               <button type="button" id="addSupervisorIncidentBtn">Adicionar incidente</button>
             </div>
 
@@ -283,11 +427,143 @@
           </section>
 
           <section class="card">
-            <h2>7. Observações Relevantes</h2>
+            <h2>8. Observações Relevantes</h2>
 
             <label>
               <span>Observações relevantes</span>
               <textarea id="sup_observacoes" data-form="sitopSupervisor" data-group="body" rows="5" placeholder="Riscos operacionais, necessidade de suporte, ações em andamento, pontos de atenção ou necessidade de decisão"></textarea>
+            </label>
+          </section>
+        </section>
+
+
+
+        <!-- SITOP SONDADOR -->
+        <section id="sitopSondadorForm" class="form-view hidden">
+          <section class="card">
+            <h2>1. Cabeçalho — SITOP Sondador</h2>
+
+            <div class="grid two">
+              <label>
+                <span>Sonda</span>
+                <select id="sond_sonda" data-form="sitopSondador" data-group="header"></select>
+              </label>
+
+              <label>
+                <span>Poço</span>
+                <input id="sond_poco" data-form="sitopSondador" data-group="header" />
+              </label>
+
+              <label>
+                <span>Sondador</span>
+                <input id="sond_sondador" data-form="sitopSondador" data-group="header" />
+              </label>
+
+              <label>
+                <span>Assistente de sondador</span>
+                <input id="sond_assistente" data-form="sitopSondador" data-group="header" />
+              </label>
+
+              <label>
+                <span>Fiscal</span>
+                <input id="sond_fiscal" data-form="sitopSondador" data-group="header" />
+              </label>
+
+              <label>
+                <span>Supervisor</span>
+                <input id="sond_supervisor" data-form="sitopSondador" data-group="header" />
+              </label>
+
+              <label>
+                <span>BDO</span>
+                <input id="sond_bdo" data-form="sitopSondador" data-group="body" placeholder="Ex.: 42" />
+              </label>
+
+              <label>
+                <span>Data</span>
+                <input type="date" id="sond_data" data-form="sitopSondador" data-group="body" />
+              </label>
+
+              <label>
+                <span>Turno</span>
+                <select id="sond_turno" data-form="sitopSondador" data-group="body">
+                  <option value="">Selecione...</option>
+                  <option>07h-19h</option>
+                  <option>19h-07h</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Situação operacional</span>
+                <input id="sond_situacao" data-form="sitopSondador" data-group="body" placeholder="Ex.: Descendo coluna" />
+              </label>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-title-row">
+              <h2>2. Linha do tempo</h2>
+              <button id="addSondadorTimelineBtn" type="button">Adicionar linha</button>
+            </div>
+
+            <p class="hint">Use horários de 15 em 15 minutos. Ex.: 00:00, 00:15, 00:30, 00:45.</p>
+            <div id="sond_timeline_list" class="dynamic-list"></div>
+          </section>
+
+          <section class="card">
+            <h2>3. Circulação das bombas</h2>
+
+            <div class="grid two">
+              <label>
+                <span>Bomba 1 — status</span>
+                <select id="sond_b1_status" data-form="sitopSondador" data-group="body">
+                  <option value="">Selecione...</option>
+                  <option>Ativa</option>
+                  <option>Inativa</option>
+                  <option>Em manutenção</option>
+                  <option>Stand-by</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Bomba 1 — horas de circulação</span>
+                <input id="sond_b1_horas" data-form="sitopSondador" data-group="body" inputmode="decimal" placeholder="Ex.: 4,5 h" />
+              </label>
+
+              <label>
+                <span>Bomba 2 — status</span>
+                <select id="sond_b2_status" data-form="sitopSondador" data-group="body">
+                  <option value="">Selecione...</option>
+                  <option>Ativa</option>
+                  <option>Inativa</option>
+                  <option>Em manutenção</option>
+                  <option>Stand-by</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Bomba 2 — horas de circulação</span>
+                <input id="sond_b2_horas" data-form="sitopSondador" data-group="body" inputmode="decimal" placeholder="Ex.: 4,5 h" />
+              </label>
+            </div>
+
+            <label>
+              <span>Observação sobre bombas</span>
+              <textarea id="sond_bombas_obs" data-form="sitopSondador" data-group="body" rows="3" placeholder="Ex.: bombas alternadas, limitação, circulação simultânea, anomalia."></textarea>
+            </label>
+          </section>
+
+          <section class="card">
+            <h2>4. Atividades paralelas e observações</h2>
+
+            <label>
+              <span>Atividades paralelas</span>
+              <textarea id="sond_atividades_paralelas" data-form="sitopSondador" data-group="body" rows="3" placeholder="Ex.: Adensando fluido"></textarea>
+            </label>
+
+            <label>
+              <span>Observações gerais</span>
+              <textarea id="sond_observacoes" data-form="sitopSondador" data-group="body" rows="4" placeholder="Dificuldades, atenção para o próximo quarto, pendências simples."></textarea>
             </label>
           </section>
         </section>
@@ -602,6 +878,7 @@
   <script src="js/utils.js"></script>
   <script src="js/forms/sitop.js"></script>
   <script src="js/forms/sitop-supervisor.js"></script>
+  <script src="js/forms/sitop-sondador.js"></script>
   <script src="js/forms/desvio.js"></script>
   <script src="js/forms/evento.js"></script>
   <script src="js/storage.js"></script>

@@ -120,6 +120,75 @@
     );
   }
 
+  function addPreventiva(data = {}) {
+    addActivityItem(
+      'sup_preventivas_list',
+      'supervisor-preventiva-item',
+      'sup_preventiva_text',
+      'Preventiva prevista/executada + status',
+      'Ex.: Preventiva do top drive prevista para o turno; executada inspeção de cabos; pendente apoio da manutenção.',
+      data
+    );
+  }
+
+  function addFalha(data = {}) {
+    addActivityItem(
+      'sup_falhas_list',
+      'supervisor-falha-item',
+      'sup_falha_text',
+      'Falha detectada + equipamento + impacto + status',
+      'Ex.: Falha em sensor da bomba 1; impacto na confiabilidade da leitura; manutenção acionada; pendente teste funcional.',
+      data
+    );
+  }
+
+  function addSubstituicao(data = {}) {
+    const container = byId('sup_substituicoes_list');
+    if (!container) return;
+
+    const item = document.createElement('div');
+    item.className = 'dynamic-item supervisor-substituicao-item';
+
+    const row = document.createElement('div');
+    row.className = 'grid two';
+
+    const tipoWrap = document.createElement('label');
+    const tipoSpan = document.createElement('span');
+    const tipo = document.createElement('select');
+    tipoSpan.textContent = 'Tipo de substituição';
+    tipo.className = 'sup_sub_tipo';
+    tipo.dataset.form = 'sitopSupervisor';
+    tipo.dataset.group = 'body';
+    ['', 'Camisa de bomba', 'Pistão de bomba', 'Tela de peneira', 'Outro'].forEach(optText => {
+      const opt = document.createElement('option');
+      opt.value = optText;
+      opt.textContent = optText || 'Selecione...';
+      tipo.appendChild(opt);
+    });
+    tipo.value = data.tipo || '';
+    tipoWrap.append(tipoSpan, tipo);
+
+    const equipamentoWrap = createInputWrap('Bomba / peneira / equipamento', 'input', 'sup_sub_equipamento', data.equipamento || '');
+    const statusWrap = createInputWrap('Status', 'input', 'sup_sub_status', data.status || '');
+    const psvWrap = createInputWrap('PSV / pop-off informada após troca de camisa', 'input', 'sup_sub_psv', data.psv || '');
+    const descWrap = createTextareaWrap('Descrição da substituição / observação', 'sup_sub_desc', data.desc || '', 'Ex.: Substituídas camisas da bomba 1 de 6.1/2” para 6”; PSV alterada/confirmada em XXXX psi.');
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'danger';
+    removeBtn.textContent = 'Remover';
+    removeBtn.addEventListener('click', () => {
+      item.remove();
+      updateOutput();
+    });
+
+    row.append(tipoWrap, equipamentoWrap, statusWrap, psvWrap);
+    item.append(row, descWrap, removeBtn);
+    container.appendChild(item);
+
+    attachAutoHandlers(item);
+  }
+
   function addPronto(data = {}) {
     const container = byId('sup_prontos_list');
     if (!container) return;
@@ -198,6 +267,24 @@
     return collectActivityList('.supervisor-atividade-paralela-item', '.sup_atividade_paralela_text');
   }
 
+  function collectPreventivas() {
+    return collectActivityList('.supervisor-preventiva-item', '.sup_preventiva_text');
+  }
+
+  function collectFalhas() {
+    return collectActivityList('.supervisor-falha-item', '.sup_falha_text');
+  }
+
+  function collectSubstituicoes() {
+    return [...document.querySelectorAll('.supervisor-substituicao-item')].map(item => ({
+      tipo: item.querySelector('.sup_sub_tipo')?.value.trim() || '',
+      equipamento: item.querySelector('.sup_sub_equipamento')?.value.trim() || '',
+      status: item.querySelector('.sup_sub_status')?.value.trim() || '',
+      psv: item.querySelector('.sup_sub_psv')?.value.trim() || '',
+      desc: item.querySelector('.sup_sub_desc')?.value.trim() || ''
+    })).filter(item => item.tipo || item.equipamento || item.status || item.psv || item.desc);
+  }
+
   function collectProntos() {
     return [...document.querySelectorAll('.supervisor-pronto-item')].map(item => ({
       nome: item.querySelector('.sup_pronto_nome').value.trim(),
@@ -231,6 +318,9 @@
   function buildOutput() {
     const prontos = collectProntos();
     const incidents = collectIncidents();
+    const preventivas = collectPreventivas();
+    const falhas = collectFalhas();
+    const substituicoes = collectSubstituicoes();
 
     let text = `*SITOP DW 12h - Supervisão*\n\n`;
 
@@ -302,12 +392,62 @@ ${value('sup_atividades_proximas') || '-'}
 
     text += `*3. Equipamentos / Integridade:*
 `;
-    text += `- *Preventivas Previstas e Executadas:* ${value('sup_previstas_executadas') || '-'}
+
+    text += `*3.1 Preventivas previstas e executadas:*
 `;
-    text += `- *Falhas Detectadas e Status das correções:* ${value('sup_falhas_status') || '-'}
+    if (preventivas.length) {
+      preventivas.forEach(item => {
+        text += `- ${item.text}
 `;
-    text += `- *Corretivas Operacionais (telas / camisas / etc):* ${value('sup_corretivas') || '-'}
+      });
+    } else {
+      text += `-
 `;
+    }
+
+    text += `
+*3.2 Falhas detectadas e status das correções:*
+`;
+    if (falhas.length) {
+      falhas.forEach(item => {
+        text += `- ${item.text}
+`;
+      });
+    } else {
+      text += `-
+`;
+    }
+
+    text += `
+*3.3 Substituições operacionais / componentes críticos:*
+`;
+    if (substituicoes.length) {
+      substituicoes.forEach(item => {
+        const campos = [];
+        if (item.tipo) campos.push(item.tipo);
+        if (item.equipamento) campos.push(item.equipamento);
+        if (item.status) campos.push(`Status: ${item.status}`);
+        if (item.psv) campos.push(`PSV/pop-off: ${item.psv}`);
+        if (item.desc) campos.push(item.desc);
+        text += `- ${campos.join(' | ') || '-'}
+`;
+        if ((item.tipo || '').toLowerCase().includes('camisa') && !item.psv) {
+          text += `  ⚠️ Troca de camisa exige informar/confirmar modificação ou validação da PSV/pop-off.
+`;
+        }
+      });
+    } else {
+      text += `-
+`;
+    }
+
+    const corretivasGerais = value('sup_corretivas');
+    if (corretivasGerais) {
+      text += `
+*3.4 Corretivas operacionais gerais:*
+${corretivasGerais}
+`;
+    }
     text += `
 `;
 
@@ -348,6 +488,9 @@ ${value('sup_atividades_proximas') || '-'}
     if (byId('sup_atividade_principal_list')) byId('sup_atividade_principal_list').innerHTML = '';
     if (byId('sup_movimentacao_carga_list')) byId('sup_movimentacao_carga_list').innerHTML = '';
     if (byId('sup_atividade_paralela_list')) byId('sup_atividade_paralela_list').innerHTML = '';
+    if (byId('sup_preventivas_list')) byId('sup_preventivas_list').innerHTML = '';
+    if (byId('sup_falhas_list')) byId('sup_falhas_list').innerHTML = '';
+    if (byId('sup_substituicoes_list')) byId('sup_substituicoes_list').innerHTML = '';
     if (byId('sup_prontos_list')) byId('sup_prontos_list').innerHTML = '';
     if (byId('sup_incident_list')) byId('sup_incident_list').innerHTML = '';
     addAtividadePrincipal();
@@ -384,11 +527,17 @@ ${value('sup_atividades_proximas') || '-'}
     addAtividadePrincipal,
     addMovimentacaoCarga,
     addAtividadeParalela,
+    addPreventiva,
+    addFalha,
+    addSubstituicao,
     addPronto,
     addIncident,
     collectAtividadesPrincipais,
     collectMovimentacoesCarga,
     collectAtividadesParalelas,
+    collectPreventivas,
+    collectFalhas,
+    collectSubstituicoes,
     collectProntos,
     collectIncidents,
     buildOutput,

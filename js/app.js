@@ -16,7 +16,7 @@
     EVENT_APPLICABLE_TO
   } = window.OpsConfig;
 
-  const { sitop, sitopSupervisor, desvio, evento } = window.OpsFormsModules;
+  const { sitop, sitopSupervisor, sitopSondador, desvio, evento } = window.OpsFormsModules;
   const storage = window.OpsStorage;
 
   const outputText = byId('outputText');
@@ -63,6 +63,7 @@
     const type = getActiveFormType();
     if (type === 'sitop') return sitop.buildOutput();
     if (type === 'sitopSupervisor') return sitopSupervisor.buildOutput();
+    if (type === 'sitopSondador') return sitopSondador.buildOutput();
     if (type === 'desvio') return desvio.buildOutput();
     return evento.buildOutput();
   }
@@ -99,6 +100,10 @@
       sitopSupervisor.clearBodyLists();
     }
 
+    if (type === 'sitopSondador' && group === 'body') {
+      sitopSondador.clearBodyLists();
+    }
+
     if (type === 'evento') {
       if (group === 'header') {
         evento.initialiseDefaults(false);
@@ -123,6 +128,10 @@
 
     if (type === 'sitopSupervisor') {
       sitopSupervisor.clearBodyLists();
+    }
+
+    if (type === 'sitopSondador') {
+      sitopSondador.clearBodyLists();
     }
 
     updateOutput();
@@ -168,6 +177,7 @@
   function initSelectsAndGroups() {
     fillSelect('sitop_sonda', RIGS);
     fillSelect('sup_sonda', RIGS);
+    fillSelect('sond_sonda', RIGS);
     fillSelect('desvio_sonda', RIGS);
     fillSelect('evento_rig', RIGS);
     fillSelect('evento_phase', PHASES);
@@ -181,6 +191,7 @@
     if (!loaded) {
       sitop.initialiseDefaults();
       sitopSupervisor.initialiseDefaults();
+      sitopSondador.initialiseDefaults();
       desvio.initialiseDefaults();
       evento.initialiseDefaults();
       storage.applyPrefsToEmptyHeaderFields();
@@ -188,63 +199,110 @@
     }
 
     storage.applyPrefsToEmptyHeaderFields();
+    if (byId('sitop_equipamento_list') && !byId('sitop_equipamento_list').children.length) sitop.addEquipment();
+    if (byId('sitop_risco_decisao_list') && !byId('sitop_risco_decisao_list').children.length) sitop.addRiskDecision();
+    if (byId('sitop_licao_list') && !byId('sitop_licao_list').children.length) sitop.addLesson();
     if (byId('sitop_npt_list') && !byId('sitop_npt_list').children.length) sitop.addNpt();
     if (byId('sitop_incident_list') && !byId('sitop_incident_list').children.length) sitop.addIncident();
+    if (byId('sond_timeline_list') && !byId('sond_timeline_list').children.length) sitopSondador.addTimelineItem();
     sitopSupervisor.initialiseDefaults();
+    sitopSondador.initialiseDefaults();
     desvio.initialiseDefaults();
   }
 
   function bindStaticButtons() {
+    const bindClick = (id, handler) => {
+      const el = byId(id);
+      if (!el) return;
+      el.addEventListener('click', handler);
+    };
+
     document.querySelectorAll('input[name="formType"]').forEach(input => {
       input.addEventListener('change', () => switchForm(input.value));
     });
 
-    byId('addNptBtn').addEventListener('click', () => {
+    bindClick('addEquipmentBtn', () => {
+      sitop.addEquipment();
+      updateOutput();
+    });
+
+    bindClick('addRiskDecisionBtn', () => {
+      sitop.addRiskDecision();
+      updateOutput();
+    });
+
+    bindClick('addLessonBtn', () => {
+      sitop.addLesson();
+      updateOutput();
+    });
+
+    bindClick('addNptBtn', () => {
       sitop.addNpt();
       updateOutput();
     });
 
-    byId('addIncidentBtn').addEventListener('click', () => {
+    bindClick('addIncidentBtn', () => {
       sitop.addIncident();
       updateOutput();
     });
 
-    byId('addSupervisorAtividadePrincipalBtn').addEventListener('click', () => {
+    bindClick('addSupervisorAtividadePrincipalBtn', () => {
       sitopSupervisor.addAtividadePrincipal();
       updateOutput();
     });
 
-    byId('addSupervisorMovimentacaoCargaBtn').addEventListener('click', () => {
+    bindClick('addSupervisorMovimentacaoCargaBtn', () => {
       sitopSupervisor.addMovimentacaoCarga();
       updateOutput();
     });
 
-    byId('addSupervisorAtividadeParalelaBtn').addEventListener('click', () => {
+    bindClick('addSupervisorAtividadeParalelaBtn', () => {
       sitopSupervisor.addAtividadeParalela();
       updateOutput();
     });
 
-    byId('addSupervisorProntoBtn').addEventListener('click', () => {
+    bindClick('addSupervisorPreventivaBtn', () => {
+      sitopSupervisor.addPreventiva();
+      updateOutput();
+    });
+
+    bindClick('addSupervisorFalhaBtn', () => {
+      sitopSupervisor.addFalha();
+      updateOutput();
+    });
+
+    bindClick('addSupervisorSubstituicaoBtn', () => {
+      sitopSupervisor.addSubstituicao();
+      updateOutput();
+    });
+
+    bindClick('addSupervisorProntoBtn', () => {
       sitopSupervisor.addPronto();
       updateOutput();
     });
 
-    byId('addSupervisorIncidentBtn').addEventListener('click', () => {
+    bindClick('addSupervisorIncidentBtn', () => {
       sitopSupervisor.addIncident();
       updateOutput();
     });
 
-    byId('copyTopBtn').addEventListener('click', openWhatsApp);
-    byId('copyBottomBtn').addEventListener('click', openWhatsApp);
-    byId('clearHeaderBtn').addEventListener('click', () => clearCurrent('header'));
-    byId('clearBodyBtn').addEventListener('click', () => clearCurrent('body'));
-    byId('clearAllBtn').addEventListener('click', clearCurrentAll);
+    bindClick('addSondadorTimelineBtn', () => {
+      sitopSondador.addTimelineItem();
+      updateOutput();
+    });
+
+    bindClick('copyTopBtn', openWhatsApp);
+    bindClick('copyBottomBtn', openWhatsApp);
+    bindClick('clearHeaderBtn', () => clearCurrent('header'));
+    bindClick('clearBodyBtn', () => clearCurrent('body'));
+    bindClick('clearAllBtn', clearCurrentAll);
   }
 
   function init() {
     initTheme();
     sitop.setCallbacks({ attachAutoHandlers, updateOutput });
     sitopSupervisor.setCallbacks({ attachAutoHandlers, updateOutput });
+    sitopSondador.setCallbacks({ attachAutoHandlers, updateOutput });
 
     initSelectsAndGroups();
 
