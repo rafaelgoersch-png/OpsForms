@@ -170,7 +170,9 @@
 
     const equipamentoWrap = createInputWrap('Bomba / peneira / equipamento', 'input', 'sup_sub_equipamento', data.equipamento || '');
     const statusWrap = createInputWrap('Status', 'input', 'sup_sub_status', data.status || '');
-    const psvWrap = createInputWrap('PSV / pop-off informada após troca de camisa', 'input', 'sup_sub_psv', data.psv || '');
+    const camisaAnteriorWrap = createInputWrap('Camisa anterior', 'input', 'sup_sub_camisa_anterior', data.camisaAnterior || '', 'text');
+    const camisaNovaWrap = createInputWrap('Camisa nova', 'input', 'sup_sub_camisa_nova', data.camisaNova || '', 'text');
+    const psvWrap = createInputWrap('PSV / pop-off alterada ou validada', 'input', 'sup_sub_psv', data.psv || '');
     const descWrap = createTextareaWrap('Descrição da substituição / observação', 'sup_sub_desc', data.desc || '', 'Ex.: Substituídas camisas da bomba 1 de 6.1/2” para 6”; PSV alterada/confirmada em XXXX psi.');
 
     const removeBtn = document.createElement('button');
@@ -182,7 +184,7 @@
       updateOutput();
     });
 
-    row.append(tipoWrap, equipamentoWrap, statusWrap, psvWrap);
+    row.append(tipoWrap, equipamentoWrap, statusWrap, camisaAnteriorWrap, camisaNovaWrap, psvWrap);
     item.append(row, descWrap, removeBtn);
     container.appendChild(item);
 
@@ -280,9 +282,11 @@
       tipo: item.querySelector('.sup_sub_tipo')?.value.trim() || '',
       equipamento: item.querySelector('.sup_sub_equipamento')?.value.trim() || '',
       status: item.querySelector('.sup_sub_status')?.value.trim() || '',
+      camisaAnterior: item.querySelector('.sup_sub_camisa_anterior')?.value.trim() || '',
+      camisaNova: item.querySelector('.sup_sub_camisa_nova')?.value.trim() || '',
       psv: item.querySelector('.sup_sub_psv')?.value.trim() || '',
       desc: item.querySelector('.sup_sub_desc')?.value.trim() || ''
-    })).filter(item => item.tipo || item.equipamento || item.status || item.psv || item.desc);
+    })).filter(item => item.tipo || item.equipamento || item.status || item.camisaAnterior || item.camisaNova || item.psv || item.desc);
   }
 
   function collectProntos() {
@@ -331,7 +335,12 @@
     text += `*Supervisor:* ${value('sup_supervisor') || '-'}\n`;
     text += `*Turmas embarcadas:* ${getTurmasText()}\n\n`;
 
-    text += `*2. Atividades:*
+    text += `*2. DDS do turno:*
+${value('sup_dds_assuntos') || '-'}
+
+`;
+
+    text += `*3. Atividades:*
 `;
 
     const atividadesPrincipais = collectAtividadesPrincipais();
@@ -340,7 +349,7 @@
     const pessoasComportamento = value('sup_pessoas_comportamento');
 
     text += `
-*2.1 Atividades realizadas nas últimas 12h:*
+*3.1 Atividades realizadas nas últimas 12h:*
 `;
 
     text += `*Atividade Principal:*
@@ -385,15 +394,15 @@ ${pessoasComportamento}
     text += `
 `;
 
-    text += `*2.2 Atividades das próximas 12h:*
+    text += `*3.2 Atividades das próximas 12h:*
 ${value('sup_atividades_proximas') || '-'}
 
 `;
 
-    text += `*3. Equipamentos / Integridade:*
+    text += `*4. Equipamentos / Integridade:*
 `;
 
-    text += `*3.1 Preventivas previstas e executadas:*
+    text += `*4.1 Preventivas previstas e executadas:*
 `;
     if (preventivas.length) {
       preventivas.forEach(item => {
@@ -406,7 +415,7 @@ ${value('sup_atividades_proximas') || '-'}
     }
 
     text += `
-*3.2 Falhas detectadas e status das correções:*
+*4.2 Falhas detectadas e status das correções:*
 `;
     if (falhas.length) {
       falhas.forEach(item => {
@@ -419,7 +428,7 @@ ${value('sup_atividades_proximas') || '-'}
     }
 
     text += `
-*3.3 Substituições operacionais / componentes críticos:*
+*4.3 Substituições operacionais / componentes críticos:*
 `;
     if (substituicoes.length) {
       substituicoes.forEach(item => {
@@ -427,12 +436,20 @@ ${value('sup_atividades_proximas') || '-'}
         if (item.tipo) campos.push(item.tipo);
         if (item.equipamento) campos.push(item.equipamento);
         if (item.status) campos.push(`Status: ${item.status}`);
+        if (item.camisaAnterior) campos.push(`Camisa anterior: ${item.camisaAnterior}`);
+        if (item.camisaNova) campos.push(`Camisa nova: ${item.camisaNova}`);
         if (item.psv) campos.push(`PSV/pop-off: ${item.psv}`);
         if (item.desc) campos.push(item.desc);
         text += `- ${campos.join(' | ') || '-'}
 `;
-        if ((item.tipo || '').toLowerCase().includes('camisa') && !item.psv) {
+        const trocaCamisa = (item.tipo || '').toLowerCase().includes('camisa');
+        const houveMudancaTamanhoCamisa = trocaCamisa && item.camisaAnterior && item.camisaNova && item.camisaAnterior !== item.camisaNova;
+        if (trocaCamisa && !item.psv) {
           text += `  ⚠️ Troca de camisa exige informar/confirmar modificação ou validação da PSV/pop-off.
+`;
+        }
+        if (houveMudancaTamanhoCamisa && !item.psv) {
+          text += `  ⚠️ Mudança de tamanho de camisa sem registro de PSV/pop-off. Formalizar no turno até implementação no checklist do torrista.
 `;
         }
       });
@@ -444,14 +461,14 @@ ${value('sup_atividades_proximas') || '-'}
     const corretivasGerais = value('sup_corretivas');
     if (corretivasGerais) {
       text += `
-*3.4 Corretivas operacionais gerais:*
+*4.4 Corretivas operacionais gerais:*
 ${corretivasGerais}
 `;
     }
     text += `
 `;
 
-    text += `*4. PRONTOS:*
+    text += `*5. PRONTOS:*
 `;
     const prontosTable = buildProntosTable(prontos);
     if (prontosTable) {
@@ -460,10 +477,10 @@ ${corretivasGerais}
       text += `PRONTOS sem anomalia\n\n`;
     }
 
-    text += `*5. Suporte Operacional:*\n`;
+    text += `*6. Suporte Operacional:*\n`;
     text += `- *Falta de Materiais / Recursos logísticos:* ${value('sup_falta_materiais') || '-'}\n\n`;
 
-    text += `*6. Incidentes / Acidentes:*\n`;
+    text += `*7. Incidentes / Acidentes:*\n`;
     if (!incidents.length) {
       text += `-\n`;
     } else {
@@ -472,7 +489,7 @@ ${corretivasGerais}
       });
     }
     text += `\n`;
-    text += `*7. Observações Relevantes:*\n${value('sup_observacoes') || '-'}`;
+    text += `*8. Observações Relevantes:*\n${value('sup_observacoes') || '-'}`;
 
     return text.trim();
   }
