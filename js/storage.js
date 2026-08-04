@@ -19,7 +19,7 @@
   }
 
   function getWellFieldIds() {
-    return ['sitop_poco', 'sup_poco', 'sond_poco', 'desvio_poco', 'evento_well'];
+    return ['sitop_poco', 'sup_poco', 'sond_poco', 'desvio_poco', 'evento_well', 'com_atendimento_poco'];
   }
 
   function getCurrentRigValue() {

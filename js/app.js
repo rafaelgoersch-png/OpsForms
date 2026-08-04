@@ -16,7 +16,7 @@
     EVENT_APPLICABLE_TO
   } = window.OpsConfig;
 
-  const { sitop, sitopSupervisor, sitopSondador, desvio, evento } = window.OpsFormsModules;
+  const { sitop, sitopSupervisor, sitopSondador, desvio, evento, comunicadoEvento } = window.OpsFormsModules;
   const storage = window.OpsStorage;
 
   const outputText = byId('outputText');
@@ -65,6 +65,7 @@
     if (type === 'sitopSupervisor') return sitopSupervisor.buildOutput();
     if (type === 'sitopSondador') return sitopSondador.buildOutput();
     if (type === 'desvio') return desvio.buildOutput();
+    if (type === 'comunicadoEvento') return comunicadoEvento.buildOutput();
     return evento.buildOutput();
   }
 
@@ -112,6 +113,11 @@
       if (group === 'body') {
         evento.resetBodyDefaults();
       }
+    }
+
+    if (type === 'comunicadoEvento' && group === 'header') {
+      comunicadoEvento.initialiseDefaults(false);
+      storage.applyPrefsToEmptyHeaderFields();
     }
 
     updateOutput();
@@ -194,6 +200,7 @@
       sitopSondador.initialiseDefaults();
       desvio.initialiseDefaults();
       evento.initialiseDefaults();
+      comunicadoEvento.initialiseDefaults();
       storage.applyPrefsToEmptyHeaderFields();
       return;
     }
@@ -208,6 +215,7 @@
     sitopSupervisor.initialiseDefaults();
     sitopSondador.initialiseDefaults();
     desvio.initialiseDefaults();
+    comunicadoEvento.initialiseDefaults();
   }
 
   function bindStaticButtons() {

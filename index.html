@@ -67,6 +67,14 @@
         </label>
 
         <label class="selector-option">
+          <input type="radio" name="formType" value="comunicadoEvento" />
+          <span>
+            <strong>Comunicado de Evento</strong>
+            <small>Comunicado rápido de ocorrência para WhatsApp</small>
+          </span>
+        </label>
+
+        <label class="selector-option">
           <input type="radio" name="formType" value="evento" />
           <span>
             <strong>Captura de Evento</strong>
@@ -683,6 +691,95 @@
           </section>
         </section>
 
+        <!-- COMUNICADO DE EVENTO -->
+        <section id="comunicadoEventoForm" class="form-view hidden">
+          <section class="card">
+            <h2>1. Cabeçalho — Comunicado de Evento</h2>
+
+            <div class="grid two">
+              <label>
+                <span>Ativo</span>
+                <input type="text" id="com_atendimento_ativo" data-form="comunicadoEvento" data-group="header" placeholder="Ex.: Bahia" />
+              </label>
+
+              <label>
+                <span>Local</span>
+                <input type="text" id="com_atendimento_local" data-form="comunicadoEvento" data-group="header" placeholder="Ex.: Locação do poço." />
+              </label>
+
+              <label>
+                <span>Poço</span>
+                <input type="text" id="com_atendimento_poco" data-form="comunicadoEvento" data-group="header" placeholder="Ex.: MJ-023" />
+              </label>
+
+              <label>
+                <span>Data</span>
+                <input type="date" id="com_atendimento_data" data-form="comunicadoEvento" data-group="header" />
+              </label>
+
+              <label>
+                <span>Hora</span>
+                <input type="time" id="com_atendimento_hora" data-form="comunicadoEvento" data-group="header" />
+              </label>
+
+              <label>
+                <span>Tipo de ocorrência</span>
+                <input type="text" id="com_atendimento_tipo" data-form="comunicadoEvento" data-group="header" placeholder="Ex.: Mal estar do colaborador, relato de dor..." />
+              </label>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>2. Descrição da ocorrência</h2>
+
+            <label>
+              <span>O que aconteceu?</span>
+              <textarea id="com_atendimento_descricao" data-form="comunicadoEvento" data-group="body" rows="5" placeholder="Descreva de forma objetiva o que ocorreu, atendimento realizado e condição atual."></textarea>
+            </label>
+
+            <div class="grid two">
+              <label>
+                <span>Empresa</span>
+                <input type="text" id="com_atendimento_empresa" data-form="comunicadoEvento" data-group="body" placeholder="Ex.: Petrorecôncavo" />
+              </label>
+
+              <label>
+                <span>Gerência</span>
+                <input type="text" id="com_atendimento_gerencia" data-form="comunicadoEvento" data-group="body" placeholder="Ex.: Sondas e Serviços" />
+              </label>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>3. Consequência e ação imediata</h2>
+
+            <div class="grid two">
+              <label>
+                <span>Houve vítimas?</span>
+                <select id="com_atendimento_vitimas" data-form="comunicadoEvento" data-group="body">
+                  <option value="">Selecione...</option>
+                  <option>Sim</option>
+                  <option>Não</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Houve danos materiais?</span>
+                <select id="com_atendimento_danos" data-form="comunicadoEvento" data-group="body">
+                  <option value="">Selecione...</option>
+                  <option>Sim</option>
+                  <option>Não</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              <span>Ação imediata</span>
+              <textarea id="com_atendimento_acao" data-form="comunicadoEvento" data-group="body" rows="4" placeholder="Ex.: Comunicado ao coordenador da sonda, engenheiro da sonda, técnico de segurança..."></textarea>
+            </label>
+          </section>
+        </section>
+
         <!-- EVENTO -->
         <section id="eventoForm" class="form-view hidden">
           <section class="card">
@@ -881,6 +978,7 @@
   <script src="js/forms/sitop-sondador.js"></script>
   <script src="js/forms/desvio.js"></script>
   <script src="js/forms/evento.js"></script>
+  <script src="js/forms/comunicado-evento.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/app.js"></script>
 </body>
